@@ -1,9 +1,14 @@
 # R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
 # RStudio Version 1.2.5042
 
+
 # library and packages
 library(tidyverse)
 library(jsonlite)
+
+# load data
+file(load = "upski.RData")
+
 
 # read JSON data
 json_data <- fromJSON("april.json", flatten = TRUE)
