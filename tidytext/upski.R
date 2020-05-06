@@ -95,7 +95,16 @@ View(posts_df %>% arrange(desc(postStats.shares)))
 # 'ร้านอาหาร' (restaurant) (6)
 # 'ไลฟ์สด' (Video Jockey) (5)
 # 'อาหาร' (20)
+# 'ช่าง' (6) (handy man)
 
+#### Qualitications
+posts_df_qual <- posts_df %>% filter(grepl('คุณสมบัติ', postText))
+# arranged roughly by engagement (comments, reactions, then shares)
+View(posts_df_qual %>% arrange(desc(postStats.comments, postStats.reactions, postStats.shares)))
+# 'คุณสมบัติ' (104) (qualifications)
+# 'อายุ 18 ปี ขึ้นไป' (3)
+# 'อายุ 25-40' (1)
+# 'ภาษาอังกฤษ' (14)
 
 
 # Example specific text search
