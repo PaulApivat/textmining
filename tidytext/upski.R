@@ -86,7 +86,15 @@ View(posts_df %>% arrange(desc(postStats.shares)))
 # 'จีน' (5)
 # 'ร้านซักรีด' (1)
 # 'Telesales' (4)
-
+# 'ประกันสังคม' (social benefit) (23)
+# '📍' (96) 
+# 'วุฒิ ม.3' (19)
+# 'สาขา' (38) Retail
+# 'ร้าน' (40) Retail
+# 'พนักงานประจำร้าน' (13) Retail
+# 'ร้านอาหาร' (restaurant) (6)
+# 'ไลฟ์สด' (Video Jockey) (5)
+# 'อาหาร' (20)
 
 
 
@@ -98,6 +106,20 @@ View(posts_df %>% filter(grepl('แม่บ้าน', postText)))
 View(posts_df %>% filter(grepl('ประจำร้าน', postText)))
 View(posts_df %>% filter(grepl('11,000', postText)))
 View(posts_df %>% filter(grepl('อายุ 25', postText)))
+View(posts_df %>% filter(grepl('ประกันสังคม', postText)))
+View(posts_df %>% filter(grepl('📍', postText)))   
+View(posts_df %>% filter(grepl('วุฒิ ม.3', postText)))
+View(posts_df %>% filter(grepl('สาขา', postText)))
+View(posts_df %>% filter(grepl('อาหาร', postText)))
+
+
+#### Top 30 Job Posting by *Number_of_Comments
+## non-traditional jobs descriptions: นักเล่นเกมส์, นักเขียนนิยายออนไลน์, แคสออนไลน์,
+## ผู้เข้าร่วมทดสอบเกม, งานอัดเสียงที่บ้าน, สอนภาษาจีนออนไลน์, เปิดแคสติ้งออนไลน์, รับสมัครแม่บ้านออนไลน์ 
+View(posts_df %>% arrange(desc(postStats.comments)))
+
+
+
 
 
 # 24 of 187 includes "Part Time"
