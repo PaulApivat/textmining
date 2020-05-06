@@ -34,7 +34,7 @@ posts_df <- as.data.frame(json_data$posts)
 # (# reactions, # comments, # shares)
 
 
-### Explore postText ###
+############# EXPLORATORY DATA ANALYSIS ################
 
 # arranged desc order postStats.reactions - top 23 are *not* job posts, but posting of screen shots (humor, thought provoking)
 # screen shot of pantip or twitter (@BFkumkom)
@@ -50,8 +50,66 @@ View(posts_df %>% arrange(desc(postComments.count)))
 
 # arrange desc order postStats.shares
 # only 2 job posting in top twenty; rest screen shots similar to 'reactions'
-# 
 View(posts_df %>% arrange(desc(postStats.shares)))
+
+########### Specific Word Search #############
+# 'Part Time' (24)
+# 'Full Time' (7)
+# 'Pizza' (9) // 6 = Pizza Company, 2 = Domino's, 1 = Call Center
+# 'Lazada' (3)
+# 'Call Center' (5)
+# 'Kerry Express' (4)
+# 'Grab Bike' (1)
+# 'Tesco Lotus' (3)
+# 'KFC' (2)
+# 'พนักงานปฏิบัติการ' (Tesco) (1)
+# 'ออนไลน์' (23) (apply online)
+# 'Admin' (6) 
+# 'แอดมิน' (11)
+# 'Office' (4)
+# 'Content' (1)
+# 'นักแปล' (1)
+# 'แม่บ้าน' (6)
+# 'ประจำร้าน' (15)
+# '10,000' (8) *10,000 bht salary in range
+# '11,000' (5) *11,000 bht salary in range
+# '13,000' (9) *13,000 bht salary in range
+# '15,000' (37) *15,000 bht salary in range
+# '18,000' (9) *18,000 bht salary in range
+# '20,000' (15) *20,000 bht salary in range
+# '30,000' (12) *30,000 bht salary in range
+# '40,000' (1) *40,000 bht salary in range
+# 'อายุ 25' (9)
+# 'คอมมิชชั่น' (8)
+# 'Commission' (4)
+# 'แพ็คสินค้า' (5)
+# 'จีน' (5)
+# 'ร้านซักรีด' (1)
+# 'Telesales' (4)
+
+
+
+
+# Example specific text search
+View(posts_df %>% filter(grepl('Pizza', postText)))
+View(posts_df %>% filter(grepl('Lazada', postText)))
+View(posts_df %>% filter(grepl('ออนไลน์', postText)))
+View(posts_df %>% filter(grepl('แม่บ้าน', postText)))
+View(posts_df %>% filter(grepl('ประจำร้าน', postText)))
+View(posts_df %>% filter(grepl('11,000', postText)))
+View(posts_df %>% filter(grepl('อายุ 25', postText)))
+
+
+# 24 of 187 includes "Part Time"
+View(filter(posts_df, grepl('Part Time', postText)))
+
+# same filter through dplyr (24 of 187 includes "Part Time")
+View(posts_df %>% filter(grepl('Part Time', postText)))
+
+####### 24 'Part Time' job posts arranged in descending order by reactions (can repeat for comments, shares)
+View(posts_df %>% filter(grepl('Part Time', postText)) %>% arrange(desc(postStats.reactions)))
+
+
 
 
 
