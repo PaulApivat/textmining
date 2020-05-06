@@ -34,6 +34,27 @@ posts_df <- as.data.frame(json_data$posts)
 # (# reactions, # comments, # shares)
 
 
+### Explore postText ###
+
+# arranged desc order postStats.reactions - top 23 are *not* job posts, but posting of screen shots (humor, thought provoking)
+# screen shot of pantip or twitter (@BFkumkom)
+View(posts_df %>% arrange(desc(postStats.reactions)))
+
+# arrange desc order postStats.comments - 50/50 job posts & screen shots
+# top 10 job posts include: online gamer, lazada (inventory mgmt), online fiction writer, online teaching, thai post office
+# tesco lotus (operations), farmhouse, audio engineer / sound mix, 
+# cross-posting: parttime pantip
+View(posts_df %>% arrange(desc(postStats.comments)))
+View(posts_df %>% arrange(desc(postComments.count)))
+
+
+# arrange desc order postStats.shares
+# only 2 job posting in top twenty; rest screen shots similar to 'reactions'
+# 
+View(posts_df %>% arrange(desc(postStats.shares)))
+
+
+
 # actual comments to each posting
 # filtered by 'RECENT_ACTIVITY' (newest) - response to each posting
 # ERROR: argument imply differing number of rows (i.e., each posts getting different number of actual comments)
