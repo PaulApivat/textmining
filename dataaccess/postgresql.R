@@ -30,16 +30,44 @@ my_data$carname <- as.character(my_data$carname)
 dbWriteTable(con, name = 'cars', value = my_data)
 dbWriteTable(con, name = 'cars', value = my_data, overwrite = TRUE)
 
-# re-run and should see "cars"
+# list tables written into the db, re-run and should see "cars"
 dbListTables(con)
 
-# reading
+# for reading a data table in the console
 dbReadTable(con, 'cars')
+# alternative way to do the same thing
+dbGetQuery(con, 'SELECT * FROM cars;')
+
+
+### ---------- ###
+# note: signing off, terminates connection to postgresql database. 
+# re-signing on, I can still access the 'cars' dataframe we wrote in last time
+# the dataframe persists
+### ---------- ###
+
 
 # Querying Data
+# fetch(carQuery) did not work
+# cannot save to a variable 
+RPostgres::dbFetch(carQuery)
 
+# Clear results before next query
+dbClearResult(carQuery)
 
+####### Querying Data that works #######
+#### KEY: use dbGetQuery() INSTEAD of dbSendQuery()
+query_res <- dbGetQuery(con, "select * from cars where mpg > 20")
 
+# save as data.frame
+res_data_frame <- as.data.frame(query_res)
+
+# dbGetQuery instead of dbSendQuery
+carQuery <- dbGetQuery(con, 'select carname, cyl, gear from cars where cyl >= 6 and gear >= 5;')
+result <- as.data.frame(carQuery)
+
+# store BACK into Compose Database 
+# when run dbListTables(con), should see two tables 'cars' and 'my_new_table'
+dbWriteTable(con, 'my_new_table', result)
 
 
 
