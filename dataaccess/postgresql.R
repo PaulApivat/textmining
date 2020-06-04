@@ -17,8 +17,29 @@ con <- dbConnect(RPostgres::Postgres(),
     password = 'PASSWORD')
 
 # check if connection is established
-# return character(0) means 'no tables' are stored in the database, so we must create one
+# return 'character(0)' means 'no tables' are stored in the database, so we must create one
 dbListTables(con)
+
+# practice inserting data / running queries
+
+# save mtcars into my_data, change first column to character
+my_data <- data.frame(carname = rownames(mtcars), mtcars, row.names = NULL)
+my_data$carname <- as.character(my_data$carname)
+
+# write to 'con' database (or allows overwriting of table)
+dbWriteTable(con, name = 'cars', value = my_data)
+dbWriteTable(con, name = 'cars', value = my_data, overwrite = TRUE)
+
+# re-run and should see "cars"
+dbListTables(con)
+
+# reading
+dbReadTable(con, 'cars')
+
+# Querying Data
+
+
+
 
 
 
