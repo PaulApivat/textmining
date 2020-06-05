@@ -21,9 +21,12 @@ getgrowthtools = GET('https://api.manychat.com/fb/page/getGrowthTools')
 
 # Process:
 # 1. manychat -> settings -> API -> Get API Key
-# 2. go to api.manychat.com/swagger#
+# 2. go to api.manychat.com/swagger# -> Authorize -> paste API 
 # 3. Request URL https://api.manychat.com/fb/page/getInfo
 # 4. Request URL https://api.manychat.com/fb/page/getGrowthTools 
 
 # NOTE: status 401 ERROR for both api endpoints. 
 
+# UPDATE:
+# 2. go to api.manychat.com/swagger# --> Authorize -> paste "Bearer API Key"
+# can only download specific users 1 at a time (need way to download in bulk)
