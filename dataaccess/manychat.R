@@ -27,6 +27,6 @@ getgrowthtools = GET('https://api.manychat.com/fb/page/getGrowthTools')
 
 # NOTE: status 401 ERROR for both api endpoints. 
 
-# UPDATE:
+# UPDATE: Success (status 200)
 # 2. go to api.manychat.com/swagger# --> Authorize -> paste "Bearer API Key"
 # can only download specific users 1 at a time (need way to download in bulk)
