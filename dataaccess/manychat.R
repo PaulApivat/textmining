@@ -18,4 +18,12 @@ library(tidyvers)
 getinfo = GET('https://api.manychat.com/fb/page/getInfo')
 getgrowthtools = GET('https://api.manychat.com/fb/page/getGrowthTools')
 
-# NOTE: status 401 error for both api endpoints. 
+
+# Process:
+# 1. manychat -> settings -> API -> Get API Key
+# 2. go to api.manychat.com/swagger#
+# 3. Request URL https://api.manychat.com/fb/page/getInfo
+# 4. Request URL https://api.manychat.com/fb/page/getGrowthTools 
+
+# NOTE: status 401 ERROR for both api endpoints. 
+
