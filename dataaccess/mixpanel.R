@@ -1,6 +1,9 @@
 # R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
 # RStudio Version 1.2.5042
 
+# load data
+file(load = "saku.RData")
+
 # installing package
 install.packages('RMixpanel')
 library(RMixpanel)

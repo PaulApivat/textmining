@@ -6,6 +6,9 @@
 
 library(tidyverse)
 
+# load data
+file(load = "saku.RData")
+
 # Worker
 jobbot <- read.csv("jobbot.csv")
 

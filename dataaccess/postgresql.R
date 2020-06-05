@@ -3,11 +3,16 @@
 
 ### PREREQUISITE: Need PostgreSQL database up and running
 
+# load data
+file(load = "saku.RData")
+
 ### RPostgres
 install.packages('RPostgres')
 
 ### Connecting to specific Postgres Instance
 library(DBI)
+
+
 
 con <- dbConnect(RPostgres::Postgres(), 
     dbname = 'jobsbot', 
