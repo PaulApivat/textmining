@@ -39,14 +39,28 @@ distinct(jobseeker, facebook.id, .keep_all = TRUE) %>%
 # undergrad (360); master (96); grade-12 (46); grade-9 (16); อนุปริญญา (14); phd (10)
 distinct(jobseeker, facebook.id, .keep_all = TRUE) %>% 
     group_by(study.level) %>% 
-    tally(sort = TRUE)
+    tally(sort = TRUE) -> jobseeker_edu
 
 # group by AGE
 # highest frequency 20's, then 30's, then 40's, then 50's & 60's (expected)
 distinct(jobseeker, facebook.id, .keep_all = TRUE) %>% 
     group_by(age) %>% 
-    tally(sort = TRUE) %>% 
-    view()
+    tally(sort = TRUE) -> jobseeker_age
+
+## age is a 'factor'
+## create another factor for 'age range'
+## note: minimum working age in TH is 15
+jobseeker_age[,'age_bracket'] <- NA
+jobseeker_age$age_bracket <- ifelse(jobseeker_age$age < 15, 'minor', jobseeker_age$age_bracket)
+jobseeker_age$age_bracket <- ifelse(jobseeker_age$age > 15 & jobseeker_age$age < 20, 'teens', jobseeker_age$age_bracket)
+jobseeker_age$age_bracket <- ifelse(jobseeker_age$age > 19 & jobseeker_age$age < 30, '20s', jobseeker_age$age_bracket)
+jobseeker_age$age_bracket <- ifelse(jobseeker_age$age > 29 & jobseeker_age$age < 40, '30s', jobseeker_age$age_bracket)
+jobseeker_age$age_bracket <- ifelse(jobseeker_age$age > 39 & jobseeker_age$age < 50, '40s', jobseeker_age$age_bracket)
+jobseeker_age$age_bracket <- ifelse(jobseeker_age$age > 49 & jobseeker_age$age < 60, '50s', jobseeker_age$age_bracket)
+jobseeker_age$age_bracket <- ifelse(jobseeker_age$age > 59 & jobseeker_age$age < 70, '60s', jobseeker_age$age_bracket)
+jobseeker_age$age_bracket <- ifelse(jobseeker_age$age > 69, '70+', jobseeker_age$age_bracket)
+
+
 
 # group by JOB CATEGORY (job.cat)
 # mostly missing data or '0' (no category)
@@ -243,4 +257,16 @@ jobseeker_edu %>%
                 fill = 'Edu', 
                 title = 'Job Seekers by Education Level') 
         + geom_text(aes(label=n), vjust=-0.5)
+
+
+### AGE BRACKET
+ggplot(data = jobseeker_age, mapping = aes(x=reorder(age,n), y=n, fill = age_bracket)) 
+    + geom_bar(stat = 'identity') 
+    + theme(axis.text.x = element_text(angle = 45, color = 'black', family = 'Krub', size = 10), 
+            legend.text = element_text(family = 'Krub')) 
+    + labs(x = 'Age Leves', 
+           y = 'Number of People', 
+           fill = 'Age Bracket', 
+           title = 'Job Seekers by Age') 
+    + geom_text(aes(label=n), vjust=-0.5)
 
