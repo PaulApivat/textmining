@@ -68,8 +68,21 @@ jobseeker_age$age_bracket <- ifelse(jobseeker_age$age > 69, '70+', jobseeker_age
 # note: need to join jobseeker and jobcat dataframes
 distinct(jobseeker, facebook.id, .keep_all = TRUE) %>% 
     group_by(job.cat) %>% 
-    tally(sort = TRUE) %>% 
-    view()
+    tally(sort = TRUE) -> jobseeker_jobcat   # n = 35
+
+
+# Need to merge with jobcat2 to access job_category and job_cluster (n = 35)
+jobseeker_jobcat <- merge(x=jobseeker_jobcat, 
+                          y=jobcat2, 
+                          by='job.cat', 
+                          all.x = TRUE)
+
+
+
+
+
+
+
 
 # group by WORK EXPERIENCE (YEARS)
 # this is a Factor; consider convert to numeric
@@ -78,8 +91,20 @@ distinct(jobseeker, facebook.id, .keep_all = TRUE) %>%
 # many first jobber profiles
 distinct(jobseeker, facebook.id, .keep_all = TRUE) %>% 
     group_by(work.exp) %>% 
-    tally(sort = TRUE) %>% 
-    view()
+    tally(sort = TRUE) -> jobseeker_we
+
+# change work.exp from factor to numeric
+jobseeker_we$work.exp <- as.numeric(jobseeker_we$work.exp)
+
+jobseeker_we[,'wk_exp_fct'] <- NA
+
+jobseeker_we$wk_exp_fct <- ifelse(jobseeker_we$work.exp < 4, '1-3', jobseeker_we$wk_exp_fct)
+jobseeker_we$wk_exp_fct <- ifelse(jobseeker_we$work.exp < 7 & jobseeker_we$work.exp > 3, '4-6', jobseeker_we$wk_exp_fct)
+jobseeker_we$wk_exp_fct <- ifelse(jobseeker_we$work.exp < 10 & jobseeker_we$work.exp > 6, '7-9', jobseeker_we$wk_exp_fct)
+jobseeker_we$wk_exp_fct <- ifelse(jobseeker_we$work.exp > 9, '10+', jobseeker_we$wk_exp_fct)
+
+# change wk_exp_fct from character to factor
+jobseeker_we$wk_exp_fct <- as.factor(jobseeker_we$wk_exp_fct)
 
 
 # understand distribution of salary from job-seekers
@@ -260,6 +285,7 @@ jobseeker_edu %>%
 
 
 ### AGE BRACKET
+# note: should not allow 500
 ggplot(data = jobseeker_age, mapping = aes(x=reorder(age,n), y=n, fill = age_bracket)) 
     + geom_bar(stat = 'identity') 
     + theme(axis.text.x = element_text(angle = 45, color = 'black', family = 'Krub', size = 10), 
@@ -269,4 +295,23 @@ ggplot(data = jobseeker_age, mapping = aes(x=reorder(age,n), y=n, fill = age_bra
            fill = 'Age Bracket', 
            title = 'Job Seekers by Age') 
     + geom_text(aes(label=n), vjust=-0.5)
+
+### JOB CATEGORY
+# once you coord_flip(): 
+# axis.text.x -> axis.text.y; 
+# geom_text(vjust) -> geom_text(hjust)
+
+ggplot(data = jobseeker_jobcat, mapping = aes(x=reorder(job_category,n), y=n, fill = job_cluster)) 
+    + geom_bar(stat = 'identity') 
+    + theme(axis.text.y = element_text(color = 'black', family = 'Krub', size = 10), 
+            legend.text = element_text(family = 'Krub')) 
+    + labs(x = 'Job Categories', 
+           y = 'Number of People', 
+           fill = 'Job Cluster', 
+           title = 'Job Seekers by Job Categories') 
+    + geom_text(aes(label=n), hjust=-0.10) 
+    + coord_flip()
+
+
+### WORK EXPERIENCE
 
