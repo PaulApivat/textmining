@@ -99,5 +99,37 @@ distinct(employer, facebook.id, .keep_all = TRUE) %>%
     tally(sort = TRUE) %>% 
     view()
 
+# List of "employer" by company.name (n = 48)
+# same as # of distinct facebook.id
+distinct(employer, facebook.id, .keep_all = TRUE) %>% 
+    group_by(company.name) %>% 
+    tally(sort = TRUE) %>% 
+    view()
+
+# Description of 'employer' by job.name 
+# note: redundant with role?
+distinct(employer, facebook.id, .keep_all = TRUE) %>% 
+    group_by(job.name) %>% 
+    tally(sort = TRUE) %>% 
+    view()
+
+# Employer Requirement by 'job categories' employers seeking
+# note: some facebook.id could be redundant
+# note: want to avoid employers logging in more than once to fill in info in piecemeal fashion
+# OR scane for latest time-stamp, then run distinct() function
+employer %>%
+    group_by(job.cat) %>%
+    tally(sort = TRUE)
+
+# Employer requirements by gender
+# ไม่ระบุ (27); หญิง (12); ชาย (6); เพศไหนก็ได้	(3)
+distinct(employer, facebook.id, .keep_all = TRUE) %>% 
+    group_by(sex) %>% 
+    tally(sort = TRUE) %>% 
+    view()
+
+
+
+
 
 
