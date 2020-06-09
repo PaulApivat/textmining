@@ -206,8 +206,11 @@ distinct(employer, facebook.id, .keep_all = TRUE) %>%
 
 
 ########--------- Visualization (Exploratory)------- #########
+### ASSUMPTION: UNIQUE FACEBOOK_ID
 
-#### JOB SEEKERS #####
+####------- JOB SEEKERS ------ #####
+
+### GENDER
 ggplot(data = jobseeker_gender, 
        mapping = aes(x=reorder(sex,n), 
        y=n, 
@@ -220,4 +223,24 @@ ggplot(data = jobseeker_gender,
            fill = 'Gender', 
            title = 'Job Seekers by Gender') 
     + geom_text(aes(label=n), vjust=-0.5)
+
+### EDUCATION
+# note: should not allow users to input whole sentences.
+jobseeker_edu %>% 
+    # filter OUT: ฝั่งดำเนินการในร้านหนังสือออนไลน์ คอยจัดการระบบภายใน... 
+    filter(n > 1) %>% 
+    ggplot(aes(x=reorder(study.level,n), y=n, fill = study.level)) 
+        + geom_bar(stat = 'identity') 
+        + theme(axis.text.x = element_text(angle = 45, 
+            hjust = 1, 
+            color = 'black', 
+            family = 'Krub', 
+            size = 10), 
+            legend.position = 'none', 
+            legend.text = element_text(family = 'Krub')) 
+        + labs(x = 'Education Levels', 
+                y = 'Number of People', 
+                fill = 'Edu', 
+                title = 'Job Seekers by Education Level') 
+        + geom_text(aes(label=n), vjust=-0.5)
 
