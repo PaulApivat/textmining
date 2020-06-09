@@ -31,7 +31,9 @@ View(distinct(jobseeker, facebook.id, .keep_all = TRUE))
 # female: 334, male: 208
 distinct(jobseeker, facebook.id, .keep_all = TRUE) %>%
     group_by(sex) %>%
-    tally(sort = TRUE)
+    tally(sort = TRUE) -> jobseeker_gender
+
+
 
 # group by STUDY.LEVEL (Education)
 # undergrad (360); master (96); grade-12 (46); grade-9 (16); อนุปริญญา (14); phd (10)
@@ -87,6 +89,9 @@ distinct(jobseeker, facebook.id, .keep_all = TRUE) %>%
 # 8 "40000"        6
 
 ####### Clean, Transform,  EMPLOYER #######
+### NOTE: IF System Permits employer to log multiple times to input multiple requirements
+### Then might need to distinct by two variables.
+
 
 # By Distinct Facebook.ID (n = 48)
 distinct(employer, facebook.id, .keep_all = TRUE) %>% view()
@@ -121,6 +126,27 @@ employer %>%
     group_by(job.cat) %>%
     tally(sort = TRUE)
 
+
+######### Join jobcat and employer dataframe
+### Assumption Field.ID == job.cat
+jobcat %>% select(Field.ID, job_cat, กลุ่มงาน) -> jobcat2
+colnames(jobcat2)[1] <- 'job.cat'
+colnames(jobcat2)[2] <- 'job_category'
+colnames(jobcat2)[3] <- 'job_cluster'
+
+### Need to join data, but ignore missing value
+### NOT have new data frame shrink (merge instead inner_join)
+employer2 <- merge(x=employer, y=jobcat2, by='job.cat', all.x = TRUE)
+
+### Employer description JOB CATEGORY
+### Mostly missing data
+employer2 %>% 
+    group_by(job_category, job_cluster) %>% 
+    tally(sort = TRUE)
+
+
+
+
 # Employer requirements by gender
 # ไม่ระบุ (27); หญิง (12); ชาย (6); เพศไหนก็ได้	(3)
 distinct(employer, facebook.id, .keep_all = TRUE) %>% 
@@ -128,8 +154,70 @@ distinct(employer, facebook.id, .keep_all = TRUE) %>%
     tally(sort = TRUE) %>% 
     view()
 
+# Employer requirement by study.level (Education)
+# ป.ตรี (16), อนุปริญญา (diploma) (10), ม.3 (8), 
+distinct(employer, facebook.id, .keep_all = TRUE) %>% 
+    group_by(study.level) %>% 
+    tally(sort = TRUE) %>% 
+    view()
+
+# Employer requirement by study.field
+# mostly missing data (n = 152)
+# why is this even a field? นอนสบาย ๆ  
+# note: facebook.id could be REDUNDANT
+employer %>% 
+    group_by(study.field) %>% 
+    tally(sort = T)
+
+# Employer requirement by work.experience
+# ไม่ต้องมี (20), 1-2 ปี (13), 3-5ปี (4), มากกว่า 5 ปี (4), ไม่ระบุ	 (7)
+distinct(employer, facebook.id, .keep_all = TRUE) %>% 
+    group_by(work.exp) %>% 
+    tally(sort = TRUE) %>% 
+    view()
+
+### Not sure how job.name and jd need to be two separate columns
+### Are we letting employers post multiple jobs? perhaps a Jobs ID is needed
+
+# Employer requirement by max.salary
+# mostly missing data
+distinct(employer, facebook.id, .keep_all = TRUE) %>% 
+    group_by(max.salary) %>% 
+    tally(sort = TRUE) %>% 
+    view()
+
+# Employer requirement by age.max 
+# 40 (12), 35 (9), 45 (6)
+distinct(employer, facebook.id, .keep_all = TRUE) %>% 
+    group_by(age.max) %>% 
+    tally(sort = TRUE) %>% 
+    view()
+
+# Employer requirement by age.min
+# 20 (7), 25 (6), 18 (5), 22 (5), 30 (4)
+distinct(employer, facebook.id, .keep_all = TRUE) %>% 
+    group_by(age.min) %>% 
+    tally(sort = TRUE) %>% 
+    view()
+
+# Employer requirement by drive.license, own.car, bike.license
+# milatary (?) (misspelled), com.skill (?), own.com (?)
+# mostly missing data
 
 
+########--------- Visualization (Exploratory)------- #########
 
-
+#### JOB SEEKERS #####
+ggplot(data = jobseeker_gender, 
+       mapping = aes(x=reorder(sex,n), 
+       y=n, 
+       fill = sex)) 
+    + geom_bar(stat = 'identity') 
+    + theme(axis.text.x = element_text(family = 'Krub', size = 15), 
+            legend.text = element_text(family = 'Krub')) 
+    + labs(x = 'Gender', 
+           y = 'Number of People', 
+           fill = 'Gender', 
+           title = 'Job Seekers by Gender') 
+    + geom_text(aes(label=n), vjust=-0.5)
 
