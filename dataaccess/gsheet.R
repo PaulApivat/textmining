@@ -105,6 +105,9 @@ jobseeker_we$wk_exp_fct <- ifelse(jobseeker_we$work.exp > 9, '10+', jobseeker_we
 
 # change wk_exp_fct from character to factor (also set levels)
 # better than trying to re-order levels later
+
+x <- jobseeker_we$wk_exp_fct
+
 jobseeker_we$wk_exp_fct <- factor(x, levels = c("1-3", "4-6", "7-9", "10+"), 
                                     labels = c("1-3", "4-6", "7-9", "10+"))
 
@@ -119,7 +122,28 @@ jobseeker_we$wk_exp_fct <- factor(x, levels = c("1-3", "4-6", "7-9", "10+"),
 # if keep factor then do salary ranges
 distinct(jobseeker, facebook.id, .keep_all = TRUE) %>% 
     group_by(min.salary) %>% 
-    tally(sort = TRUE)
+    tally(sort = TRUE) -> jobseeker_min
+
+# change min.salary to numeric from factor WITHOUT losing information
+# can use as.numeric(paste(x)), but need to get rid of commas first
+# use gsub() function within as.numeric() - from base R
+jobseeker_min$min.salary <- as.numeric(gsub(",", "", jobseeker_min$min.salary))
+
+jobseeker_min[,'salary_fct'] <- NA
+
+jobseeker_min$salary_fct <- ifelse(jobseeker_min$min.salary < 15001, '0-15000', jobseeker_min$salary_fct)
+jobseeker_min$salary_fct <- ifelse(jobseeker_min$min.salary > 14999 & jobseeker_min$min.salary < 30001, '15000-30000', jobseeker_min$salary_fct)
+jobseeker_min$salary_fct <- ifelse(jobseeker_min$min.salary > 29999 & jobseeker_min$min.salary < 45001, '30001-45000', jobseeker_min$salary_fct)
+jobseeker_min$salary_fct <- ifelse(jobseeker_min$min.salary > 44999 & jobseeker_min$min.salary < 60001, '45001-60000', jobseeker_min$salary_fct)
+jobseeker_min$salary_fct <- ifelse(jobseeker_min$min.salary > 59999 & jobseeker_min$min.salary < 75001, '60001-75000', jobseeker_min$salary_fct)
+jobseeker_min$salary_fct <- ifelse(jobseeker_min$min.salary > 75000, '75000+', jobseeker_min$salary_fct)
+
+# still in chr, need to change to factor, and set levels
+y <- jobseeker_min$salary_fct
+
+jobseeker_min$salary_fct <- factor(y, levels = c("0-15000","15000-30000", "30001-45000", "45001-60000", "60001-75000","75000+"), 
+                                    labels = c("0-15000","15000-30000", "30001-45000", "45001-60000", "60001-75000","75000+"))
+
 
 # A tibble: 42 x 2
 #   min.salary     n
@@ -334,4 +358,19 @@ ggplot(data = jobseeker_we, mapping = aes(x=reorder(work.exp,n), y=n, fill = wk_
     + theme(panel.background = element_rect(fill = 'black'), 
             panel.grid.major = element_line(color = 'black'), 
             panel.grid.minor = element_line(color = 'black'))
+
+### MINIMUM SALARY
+# ---------------------------- NEEDS WORK -----------------------#
+jobseeker_min %>% 
+    filter(min.salary != is.na(min.salary)) %>% 
+    filter(n > 1) %>% 
+    ggplot(aes(x=reorder(min.salary, min.salary), y=n, fill = salary_fct)) 
+        + geom_bar(stat = 'identity') 
+        + theme(axis.text.x = element_text(angle = 45, hjust = 1, color = 'black', family = 'Krub', size = 10), 
+                legend.text = element_text(family = 'Krub')) 
+        + labs(x = 'Minimum Salary', 
+               y = 'Number of People', 
+               fill = 'Min Salary Ranges', 
+               title = 'Job Seekers by Desired Mininum Salary') 
+        + geom_text(aes(label=n), vjust=-0.5)
 
