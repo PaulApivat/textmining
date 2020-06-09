@@ -99,12 +99,18 @@ jobseeker_we$work.exp <- as.numeric(jobseeker_we$work.exp)
 jobseeker_we[,'wk_exp_fct'] <- NA
 
 jobseeker_we$wk_exp_fct <- ifelse(jobseeker_we$work.exp < 4, '1-3', jobseeker_we$wk_exp_fct)
-jobseeker_we$wk_exp_fct <- ifelse(jobseeker_we$work.exp < 7 & jobseeker_we$work.exp > 3, '4-6', jobseeker_we$wk_exp_fct)
-jobseeker_we$wk_exp_fct <- ifelse(jobseeker_we$work.exp < 10 & jobseeker_we$work.exp > 6, '7-9', jobseeker_we$wk_exp_fct)
+jobseeker_we$wk_exp_fct <- ifelse(jobseeker_we$work.exp > 3 & jobseeker_we$work.exp < 7, '4-6', jobseeker_we$wk_exp_fct)
+jobseeker_we$wk_exp_fct <- ifelse(jobseeker_we$work.exp > 6 & jobseeker_we$work.exp < 10, '7-9', jobseeker_we$wk_exp_fct)
 jobseeker_we$wk_exp_fct <- ifelse(jobseeker_we$work.exp > 9, '10+', jobseeker_we$wk_exp_fct)
 
-# change wk_exp_fct from character to factor
-jobseeker_we$wk_exp_fct <- as.factor(jobseeker_we$wk_exp_fct)
+# change wk_exp_fct from character to factor (also set levels)
+# better than trying to re-order levels later
+jobseeker_we$wk_exp_fct <- factor(x, levels = c("1-3", "4-6", "7-9", "10+"), 
+                                    labels = c("1-3", "4-6", "7-9", "10+"))
+
+
+
+
 
 
 # understand distribution of salary from job-seekers
@@ -314,4 +320,18 @@ ggplot(data = jobseeker_jobcat, mapping = aes(x=reorder(job_category,n), y=n, fi
 
 
 ### WORK EXPERIENCE
+# note neede to properly set factor levels in wk_exp_fct
+ggplot(data = jobseeker_we, mapping = aes(x=reorder(work.exp,n), y=n, fill = wk_exp_fct)) 
+    + geom_bar(stat = 'identity') 
+    + theme(axis.text.x = element_text(hjust = 1, color = 'black', family = 'Krub', size = 10), 
+            legend.text = element_text(family = 'Krub')) 
+    + labs(x = 'Work Experience (yrs)', 
+           y = 'Number of People', 
+           fill = 'Year Range', 
+           title = 'Job Seekers by Work Experience') 
+    + geom_text(aes(label=n), vjust=-0.5, color = 'white') 
+    + scale_fill_manual(values = c("#edf8fb", "#b2e2e2", "#66c2a4", "#238b45")) 
+    + theme(panel.background = element_rect(fill = 'black'), 
+            panel.grid.major = element_line(color = 'black'), 
+            panel.grid.minor = element_line(color = 'black'))
 
