@@ -19,7 +19,7 @@ jobcat <- read.csv('jobcat.csv')
 # Employer
 employer <- read.csv('employer.csv')
 
-####### Clean, Transform, EDA #######
+####### Clean, Transform, EDA JOB SEEKER #######
 
 # keep only distinct Full.name in jobbot (worker); 548 rows (from 1525)
 View(distinct(jobseeker, Full.name, .keep_all = TRUE)) 
@@ -38,6 +38,33 @@ distinct(jobseeker, facebook.id, .keep_all = TRUE) %>%
 distinct(jobseeker, facebook.id, .keep_all = TRUE) %>% 
     group_by(study.level) %>% 
     tally(sort = TRUE)
+
+# group by AGE
+# highest frequency 20's, then 30's, then 40's, then 50's & 60's (expected)
+distinct(jobseeker, facebook.id, .keep_all = TRUE) %>% 
+    group_by(age) %>% 
+    tally(sort = TRUE) %>% 
+    view()
+
+# group by JOB CATEGORY (job.cat)
+# mostly missing data or '0' (no category)
+# งานอื่นๆ (n = 47); การขาย การตลาด (n = 42); วิศวกร (n = 30)
+# note: need to join jobseeker and jobcat dataframes
+distinct(jobseeker, facebook.id, .keep_all = TRUE) %>% 
+    group_by(job.cat) %>% 
+    tally(sort = TRUE) %>% 
+    view()
+
+# group by WORK EXPERIENCE (YEARS)
+# this is a Factor; consider convert to numeric
+# mostly of missing data
+# work experience by frequency: 0 (118), 1 (45), 2 (33)
+# many first jobber profiles
+distinct(jobseeker, facebook.id, .keep_all = TRUE) %>% 
+    group_by(work.exp) %>% 
+    tally(sort = TRUE) %>% 
+    view()
+
 
 # understand distribution of salary from job-seekers
 # salary is a factor so must use group_by
@@ -58,4 +85,19 @@ distinct(jobseeker, facebook.id, .keep_all = TRUE) %>%
 # 6 "50000"        7
 # 7 "35000"        6
 # 8 "40000"        6
+
+####### Clean, Transform,  EMPLOYER #######
+
+# By Distinct Facebook.ID (n = 48)
+distinct(employer, facebook.id, .keep_all = TRUE) %>% view()
+
+# Description of "employer" by role
+# note: reduce redundancy by getting rid of emoji or have data dictionary
+# เจ้าของกิจการ (32); HR (9); ผู้จัดการแผนก (3); อื่นๆ (4)
+distinct(employer, facebook.id, .keep_all = TRUE) %>% 
+    group_by(role) %>% 
+    tally(sort = TRUE) %>% 
+    view()
+
+
 
