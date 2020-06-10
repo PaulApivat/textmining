@@ -382,6 +382,8 @@ jobseeker_min %>%
         + geom_text(aes(label=n), vjust=-0.5)
 
 #### dataframes of importance
+x 
+y 
 jobseeker
 jobseeker_we
 jobseeker_age
