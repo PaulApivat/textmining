@@ -18,3 +18,6 @@ summary(smart_job_data)
 
 # check column names (compare to data_full)
 names(smart_job_data)  # compare names(data_full)
+
+## NOTES
+# - jobseeker can create multiple entries in smart_job_data (see UserID)

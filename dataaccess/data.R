@@ -21,3 +21,6 @@ data_full <- read.csv("data_full.csv")
 # data_full has JobAnnounce_ and Employer_ (presumably from employer side)
 # smart_job_data is from perspective of Job Seeker
 names(data_full)  # compare names(smart_job_data)
+
+## NOTES
+# - employer can create multiple entries in data_full (see Employer_UserID)
