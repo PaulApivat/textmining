@@ -157,6 +157,13 @@ jobseeker_min$salary_fct <- factor(y, levels = c("0-15000","15000-30000", "30001
 # 7 "35000"        6
 # 8 "40000"        6
 
+
+
+
+
+
+
+
 ####### Clean, Transform,  EMPLOYER #######
 ### NOTE: IF System Permits employer to log multiple times to input multiple requirements
 ### Then might need to distinct by two variables.
