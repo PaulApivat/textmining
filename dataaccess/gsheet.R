@@ -381,3 +381,12 @@ jobseeker_min %>%
                title = 'Job Seekers by Desired Mininum Salary') 
         + geom_text(aes(label=n), vjust=-0.5)
 
+#### dataframes of importance
+jobseeker
+jobseeker_we
+jobseeker_age
+jobseeker_edu
+jobseeker_gender
+jobseeker_jobcat
+jobseeker_min
+
