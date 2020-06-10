@@ -15,3 +15,6 @@ smart_job_data <- read.csv("smart_job_data.csv")
 # quick exploratory
 # data SHAPE: 5,944 rows, 175 columns
 summary(smart_job_data)
+
+# check column names (compare to data_full)
+names(smart_job_data)  # compare names(data_full)
