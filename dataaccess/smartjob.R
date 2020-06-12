@@ -221,7 +221,9 @@ mygrid2 <- mygrid %>%
     inner_join(mygrid2, by = 'name')
 
 
-### APPLICANT BY PROVINCE
+### APPLICANT BY PROVINCE ###
+# note: to filter out Bangkok (outlier); mygrid2 %>% filter(code != 'BKK') 
+
 ggplot(data = mygrid2, mapping = aes(xmin = col, ymin = row, xmax = col + 1, ymax = row + 1, fill = n)) 
     + geom_rect(color = '#ffffff') 
     + theme_minimal() 
