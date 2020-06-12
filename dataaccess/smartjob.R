@@ -32,8 +32,12 @@ distinct(smart_job_data, UserID, .keep_all = TRUE) -> smartjob_unique
 
 smartjob_unique
 
+##### NOTE some UserID had multiple entries
+## 188338 had 17 entries (most), 14798488 had 15 entries (second) etc.
+
 ####### Exploratory Data Visualization (Descriptive) ##########
 # note: assumption of unique UserID
+# note: each unique UserID had corresponding unique EmployerID (NO overlap in jobs?)
 # note: will try not to create additional data frames aside from smartjob_unique
 
 ### Employment Types Sought
@@ -49,4 +53,15 @@ smartjob_unique %>%
         + labs(x = 'Employment Type', 
                y = 'Number of People', 
                title = "Smart Job Data: Job Seeker by Employment Type")
+
+### Applicant Types of Job Seekers
+smartjob_unique %>% 
+    group_by(ApplicantTypeName) %>% 
+    tally(sort = TRUE) %>% 
+    ggplot(aes(x = reorder(ApplicantTypeName, n), y=n, fill=ApplicantTypeName)) 
+        + geom_bar(stat = 'identity') 
+        + geom_text(aes(label=n), vjust=-0.5) 
+        + scale_fill_discrete(name = "Applicant Type Name", labels = c("Disability m.33", "Elder", "General Job Seeker")) 
+        + labs(x = 'Applicant Type Name', y = 'Number of People', title = "Smart Job Data: Job Seeker by Applicant Type") 
+        + theme(axis.text.x = element_text(family = 'Krub', angle = 45, hjust = 1))
 
