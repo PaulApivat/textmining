@@ -65,3 +65,32 @@ smartjob_unique %>%
         + labs(x = 'Applicant Type Name', y = 'Number of People', title = "Smart Job Data: Job Seeker by Applicant Type") 
         + theme(axis.text.x = element_text(family = 'Krub', angle = 45, hjust = 1))
 
+
+#### Top 24 Job Descriptions ranked and grouped by Job Fields
+smartjob_unique %>% 
+    group_by(JobDescription, JobFieldName) %>% 
+    tally(sort = TRUE) %>% 
+    filter(n > 3) %>% 
+    filter(JobDescription !='-') %>% 
+    ggplot(aes(x=reorder(JobDescription,n), y=n, fill=JobFieldName)) 
+        + geom_bar(stat = 'identity') 
+        + geom_text(aes(label=n), vjust=-0.5) 
+        + theme(axis.text.x = element_text(family = 'Krub', angle = 45, hjust = 1), 
+                legend.text = element_text(family = 'Krub')) 
+        + labs(x = 'Job Description', 
+               y = 'Number of People', 
+               title = 'Smart Job: Top 24 Job Descriptions ranked and grouped by Job Fields')
+
+#### Top 30 Job Positions 
+smartjob_unique %>% 
+    group_by(JobPosition) %>% 
+    tally(sort = TRUE) %>% 
+    # filtering only top 30 job positions
+    filter(n > 11) %>% 
+    ggplot(aes(x=reorder(JobPosition,desc(n)), y=n)) 
+        + geom_bar(stat = 'identity') 
+        + theme(axis.text.x = element_text(family = 'Krub', angle = 45, hjust = 1)) 
+        + labs(x = 'Job Position', 
+               y = 'Number of People', 
+               title = "Smart Job: Applicant's Top 30 Job Positions")
+
