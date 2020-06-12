@@ -211,3 +211,38 @@ smartjob_unique <- add_column(smartjob_unique, ProvinceNameEn = NA, .after = "Pr
 > smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ชัยภูมิ', 'Chaiyaphum', smartjob_unique$ProvinceNameEn)
 > smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='พิจิตร', 'Phichit', smartjob_unique$ProvinceNameEn)
 
+# create custom grid mygrid with Thai alphabet
+smartjob_unique %>% group_by(ProvinceName, ProvinceNameEn) %>% tally(sort = TRUE) -> mygrid2
+
+colnames(mygrid2)[2] <- "name"
+
+# join with mygrid to get 'row' and 'col'
+mygrid2 <- mygrid %>%
+    inner_join(mygrid2, by = 'name')
+
+
+### APPLICANT BY PROVINCE
+ggplot(data = mygrid2, mapping = aes(xmin = col, ymin = row, xmax = col + 1, ymax = row + 1, fill = n)) 
+    + geom_rect(color = '#ffffff') 
+    + theme_minimal() 
+    + theme(panel.grid = element_blank(), 
+            axis.text = element_blank(), 
+            axis.title = element_blank()) 
+    + geom_text(aes(x = col, y = row, label = ProvinceName), 
+                family = 'Krub', 
+                alpha = 0.5, 
+                nudge_x = 0.5, 
+                nudge_y = -0.5, 
+                size = 3) 
+    + scale_y_reverse() 
+    + scale_fill_gradient2(low = '#ffeda0', 
+                           mid = '#feb24c', 
+                           high = '#f03b20', 
+                           midpoint = 100, 
+                           na.value = 'white', 
+                           guide = 'colourbar', 
+                           aesthetics = 'fill') 
+    + labs(fill = 'Applicants', 
+           title = 'Job Applicants by Province', 
+           subtitle = 'Bangkok is an outlier') 
+
