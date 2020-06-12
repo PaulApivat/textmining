@@ -248,3 +248,36 @@ ggplot(data = mygrid2, mapping = aes(xmin = col, ymin = row, xmax = col + 1, yma
            title = 'Job Applicants by Province', 
            subtitle = 'Bangkok is an outlier') 
 
+##### Other Categories (To Do) ######
+# - SalaryRequireUnitName
+smartjob_unique %>% group_by(SalaryRequireUnitName) %>% tally(sort = TRUE)
+# - TypeName
+smartjob_unique %>% group_by(TypeName) %>% tally(sort = TRUE)
+
+## Mininum Wage
+# Need to create brackets - too many rows
+smartjob_unique %>% group_by(Wage_Min) %>% tally(sort = TRUE)
+
+###### Explain How Jobs Expire ######
+smartjob_unique %>% group_by(ExpireDate) %>% tally(sort = TRUE) -> expire_date
+
+expire_date[order(as.Date(expire_date$ExpireDate, format="%d/%m/%Y")),] -> expire_date2
+
+### Highlight Expiration Date on Jobs, relative to "today" (June 12, 2020)
+ggplot(data = expire_date2, mapping = aes(x=as.Date(ExpireDate, format="%d/%m/%Y"), y=n)) 
+    + geom_point() 
+    + theme(axis.text.x = element_text(angle = 75, hjust = 1, size = 10)) 
+    # vertical line for today, entered manually
+    + geom_vline(xintercept = as.numeric(as.Date("2563-06-12")), linetype=4, color = 'red') 
+    + geom_text(aes(label=n), nudge_x = 1, nudge_y = -1)
+
+
+# alternative way to do geom_vline()
+ggplot(data = expire_date2, mapping = aes(x=as.Date(ExpireDate, format="%d/%m/%Y"), y=n)) 
+    + geom_point() 
+    + theme(axis.text.x = element_text(angle = 75, hjust = 1, size = 10)) 
+    # more intuitive way to enter date
+    + geom_vline(xintercept = as.numeric(as.Date("12/06/2563", format="%d/%m/%Y")), linetype=4, color = 'red') 
+    + geom_text(aes(label=n), nudge_x = 1, nudge_y = -1) 
+    + labs(x="Job Post Expiration Dates", y="Number of Posting", title="Job Posting: May 7th - Aug 6th, 2020", subtitle = "Today: June 12, 2020")
+
