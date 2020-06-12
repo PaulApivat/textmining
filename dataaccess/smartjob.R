@@ -94,3 +94,22 @@ smartjob_unique %>%
                y = 'Number of People', 
                title = "Smart Job: Applicant's Top 30 Job Positions")
 
+#### NOTE:
+# without coord_flip(): ggplot(aes(x=reorder(x,desc(n))), axis.text.x = element_text(angle = 45) + geom_text(vjust = -0.5)
+# with coord_flip(): ggplot(aes(x=reorder(x,n))), axis.text.y = element_text() + geom_text(hjust = -0.5)
+# with coord_flip(): vjust -> hjust, axis.text.x -> axis.text.y, angle -> "no" angle needed
+
+#### Top 30 Job Position NAMES
+smartjob_unique %>% 
+    group_by(JobPositionName) %>% 
+    tally(sort = TRUE) %>% 
+    filter(n > 19) %>% 
+    ggplot(aes(x=reorder(JobPositionName,n), y=n)) 
+        + geom_bar(stat = 'identity') 
+        + theme(axis.text.y = element_text(family = 'Krub', hjust = 1)) 
+        + labs(x = 'Job Position NAME', 
+               y = 'Number of People', 
+               title = 'Smart Job: Top 30 Job Positions NAMES') 
+        + geom_text(aes(label=n), hjust=-0.5) 
+        + coord_flip()
+
