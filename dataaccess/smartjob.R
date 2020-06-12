@@ -5,6 +5,7 @@
 
 # package
 library(tidyverse)
+library(geofacet)    # visualize geospatial (province) data
 
 # load and save data
 load(file = "saku.RData")
@@ -112,4 +113,101 @@ smartjob_unique %>%
                title = 'Smart Job: Top 30 Job Positions NAMES') 
         + geom_text(aes(label=n), hjust=-0.5) 
         + coord_flip()
+
+##### VISUALIZE INFORMATION VIA PROVINCE #####
+library(geofacet)
+
+mygrid <- data.frame(
+  row = c(2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 10, 10, 10, 11, 11, 12, 13, 14, 15, 16, 17, 17, 17, 18, 19, 20, 20, 20, 21, 21),
+  col = c(3, 2, 3, 4, 1, 9, 8, 2, 5, 3, 2, 10, 9, 8, 7, 6, 5, 4, 9, 2, 8, 3, 4, 6, 7, 5, 10, 11, 3, 9, 8, 6, 7, 4, 5, 10, 8, 4, 3, 6, 7, 9, 5, 9, 3, 2, 5, 7, 8, 4, 6, 3, 4, 7, 8, 5, 6, 4, 7, 8, 3, 9, 3, 3, 3, 3, 3, 4, 5, 3, 5, 5, 7, 5, 6, 8, 7),
+  name = c("Chiang Rai", "Chiang Mai", "Phayao", "Nan", "Mae Hong Son", "Bungkan", "Nong Khai", "Lampang", "Uttaradit", "Phrae", "Lamphun", "Nakhon Phanom", "Sakon Nakhon", "Udon Thani", "Nong Bua Lam Phu", "Loei", "Phitsanulok", "Sukhothai", "Mukdahan", "Tak", "Kalasin", "Kamphaeng Phet", "Phichit", "Chaiyaphum", "Khon Kaen", "Phetchabun", "Amnat Charoen", "Ubon Ratchathani", "Nakhon Sawan", "Roi Et", "Maha Sarakham", "Saraburi", "Lop Buri", "Sing Buri", "Ang Thong", "Yasothon", "Si Sa Ket", "Chai Nat", "Uthai Thani", "Pathum Thani", "Nakhon Ratchasima", "Buri Ram", "Nonthaburi", "Surin", "Suphan Buri", "Kanchanaburi", "Bangkok", "Nakhon Nayok", "Prachin Buri", "Phra Nakhon Si Ayutthaya", "Samut Prakan", "Ratchaburi", "Nakhon Pathom", "Chachoengsao", "Sa Kaeo", "Samut Sakhon", "Chon Buri", "Samut Songkhram", "Rayong", "Chanthaburi", "Phetchaburi", "Trat", "Prachuap Khiri Khan", "Chumphon", "Ranong", "Surat Thani", "Phangnga", "Krabi", "Nakhon Si Thammarat", "Phuket", "Trang", "Phattalung", "Pattani", "Satun", "Songkhla", "Narathiwat", "Yala"),
+  code = c("CRI", "CMI", "PYO", "NAN", "MSN", "BKN", "NKI", "LPG", "UTD", "PRE", "LPN", "NPM", "SNK", "UDN", "NBP", "LEI", "PLK", "STI", "MDH", "TAK", "KSN", "KPT", "PCT", "CPM", "KKN", "PNB", "ACR", "UBN", "NSN", "RET", "MKM", "SRI", "LRI", "SBR", "ATG", "YST", "SSK", "CNT", "UTI", "PTE", "NMA", "BRM", "NBI", "SRN", "SPB", "KRI", "BKK", "NYK", "PRI", "AYA", "SPK", "RBR", "NPT", "CCO", "SKW", "SKN", "CBI", "SKM", "RYG", "CTI", "PBI", "TRT", "PKN", "CPN", "RNG", "SNI", "PNA", "KBI", "NRT", "PKT", "TRG", "PLG", "PTN", "STN", "SKA", "NWT", "YLA"),
+  stringsAsFactors = FALSE
+)
+
+grid_preview(mygrid)
+
+# add new column ProvinceNameEn after ProvinceName in smartjob_unique ###
+smartjob_unique <- add_column(smartjob_unique, ProvinceNameEn = NA, .after = "ProvinceName")
+
+# conditionally change thai province names to English
+
+> smartjob_unique <- add_column(smartjob_unique, ProvinceNameEn = NA, .after = "ProvinceName")
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='กรุงเทพมหานคร', 'Bangkok', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สงขลา', 'Songkhla', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ปทุมธานี', 'Pathum Thani', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='นนทบุรี', 'Nonthaburi', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ชลบุรี', 'Chon Buri', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สมุทรปราการ', 'Samut Prakan', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ปราจีนบุรี', 'Prachin Buri', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='เชียงใหม่', 'Chiang Mai', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สมุทรสาคร', 'Samut Sakhon', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ภูเก็ต', 'Phuket', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ประจวบคีรีขันธ์', 'Prachuap Khiri Khan', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ฉะเชิงเทรา', 'Chachoengsao', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='เชียงราย', 'Chiang Rai', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='นครพนม', 'Nakhon Phanom', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สุรินทร์', 'Surin', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ขอนแก่น', 'Khon Kaen', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='นครปฐม', 'Nakhon Pathom', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='มุกดาหาร', 'Mukdahan', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ลำพูน', 'Lamphun', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ชุมพร', 'Chumphon', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='นครศรีธรรมราช', 'Nakhon Si Thammarat', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='พัทลุง', 'Phattalung', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ราชบุรี', 'Ratchaburi', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ระยอง', 'Rayong', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ร้อยเอ็ด', 'Roi Et', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ลำปาง', 'Lampang', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='อุบลราชธานี', 'Ubon Ratchathani', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='มหาสารคาม', 'Maha Sarakham', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='นครราชสีมา', 'Nakhon Ratchasima', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='พิษณุโลก', 'Phitsanulok', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ลพบุรี', 'Lop Buri', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สุราษฎร์ธานี', 'Surat Thani', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='กำแพงเพชร', 'Kamphaeng Phet', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='นราธิวาส', 'Narathiwat', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='อุดรธานี', 'Udon Thani', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='กระบี่', 'Krabi', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='พระนครศรีอยุธยา', 'Phra Nakhon Si Ayutthaya', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สระบุรี', 'Saraburi', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สุพรรณบุรี', 'Suphan Buri', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='กาญจนบุรี', 'Kanchanaburi', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='หนองคาย', 'Nong Khai', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='เพชรบูรณ์', 'Phetchabun', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='กาฬสินธุ์', 'Kalasin', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ระนอง', 'Ranong', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สิงห์บุรี', 'Sing Buri', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ตรัง', 'Trang', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='น่าน', 'Nan', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='บึงกาฬ', 'Bungkan', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='บุรีรัมย์', 'Buri Ram', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ยะลา', 'Yala', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ยโสธร', 'Yasothon', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='จันทบุรี', 'Chanthaburi', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ชัยนาท', 'Chai Nat', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ตราด', 'Trat', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='พะเยา', 'Phayao', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สุโขทัย', 'Sukhothai', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='นครสวรรค์', 'Nakhon Sawan', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ปัตตานี', 'Pattani', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สกลนคร', 'Sakon Nakhon', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สมุทรสงคราม', 'Samut Songkhram', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='อุตรดิตถ์', 'Uttaradit', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='เพชรบุรี', 'Phetchaburi', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='เลย', 'Loei', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='อำนาจเจริญ', 'Amnat Charoen', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='อุทัยธานี', 'Uthai Thani', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='นครนายก', 'Nakhon Nayok', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='แพร่', 'Phrae', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สระแก้ว', 'Sa Kaeo', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ศรีสะเกษ', 'Si Sa Ket', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='อ่างทอง', 'Ang Thong', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='แม่ฮ่องสอน', 'Mae Hong Son', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='สตูล', 'Satun', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='หนองบัวลำภู', 'Nong Bua Lam Phu', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='พังงา', 'Phangnga', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ตาก', 'Tak', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='ชัยภูมิ', 'Chaiyaphum', smartjob_unique$ProvinceNameEn)
+> smartjob_unique$ProvinceNameEn <- ifelse(smartjob_unique$ProvinceName=='พิจิตร', 'Phichit', smartjob_unique$ProvinceNameEn)
 
