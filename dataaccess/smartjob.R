@@ -6,6 +6,7 @@
 # package
 library(tidyverse)
 library(geofacet)    # visualize geospatial (province) data
+library(formattable)  # nicely format province_salary2 table
 
 # load and save data
 load(file = "saku.RData")
@@ -319,9 +320,10 @@ province_salary2
 # change ALL numbers in dataframe to two decimal places
 province_salary2[,2:4] <- round(province_salary2[,2:4], digits = 2)
 
+## Formatting province_salary2 table
+library(formattable)
 
-
-
+formattable(province_salary2)  # bare bones
 
 ##### REQUIRE MANYCHAT or MIXPANEL or POSTGRESQL access [User ที่กดเข้ามามีแนวโน้มที่จะใช้ตัวเลือก หาคน หางาน หรือ ไม่เลือกตัวเลือกใด ๆ เลยเป็นเท่าไร] #######
 ##### REQUIRE MANYCHAT or MIXPANEL or POSTGRESQL access [User กี่ % ที่กดเข้าไปดูงานที่เราส่งไปให้จริง ๆ] ######
