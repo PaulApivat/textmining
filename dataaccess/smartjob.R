@@ -325,6 +325,20 @@ library(formattable)
 
 formattable(province_salary2)  # bare bones
 
+## Add green color
+customGreen0 = "#DeF7E9"
+customGreen = "#71CA97"
+customRed = "#ff7f7f"
+
+formattable(province_salary2, 
+            align = c("l", "c", "c", "c"), 
+            list(`ProvinceName` = formatter("span", style = style(color = "grey", font.weight = "bold")), 
+            `ชั่วโมง`= color_tile(customGreen, customGreen0), 
+            `เดือน`= color_tile(customGreen, customGreen0), 
+            `วัน`= color_tile(customGreen, customGreen0)))
+
+
+
 ##### REQUIRE MANYCHAT or MIXPANEL or POSTGRESQL access [User ที่กดเข้ามามีแนวโน้มที่จะใช้ตัวเลือก หาคน หางาน หรือ ไม่เลือกตัวเลือกใด ๆ เลยเป็นเท่าไร] #######
 ##### REQUIRE MANYCHAT or MIXPANEL or POSTGRESQL access [User กี่ % ที่กดเข้าไปดูงานที่เราส่งไปให้จริง ๆ] ######
 ##### REQUIRE MANYCHAT or MIXPANEL or POSTGRESQL access [User หยุดหรือใช้เวลาที่ flow ไหนนานสุด] #######
