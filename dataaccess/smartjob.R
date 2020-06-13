@@ -305,11 +305,21 @@ smartjob_unique <- add_column(smartjob_unique, Wage_Min_num = NA, .after = "Wage
 smartjob_unique$Wage_Min_num <- as.numeric(gsub(",", "", smartjob_unique$Wage_Min))
 
 ### Long table of ProvinceName by SalaryRequireUnitName (need to WIDEN it)
+### principle of Tidy Tables
 smartjob_unique %>% 
     group_by(ProvinceName, SalaryRequireUnitName) %>% 
     summarize(avg_min_wage = mean(Wage_Min_num)) -> province_salary
 
 province_salary
+
+### Spread Table (province_salary2)
+### principle of Tidy Tables
+spread(province_salary, key = SalaryRequireUnitName, value = avg_min_wage) -> province_salary2
+
+province_salary2
+
+
+
 
 
 ##### REQUIRE MANYCHAT or MIXPANEL or POSTGRESQL access [User ที่กดเข้ามามีแนวโน้มที่จะใช้ตัวเลือก หาคน หางาน หรือ ไม่เลือกตัวเลือกใด ๆ เลยเป็นเท่าไร] #######
