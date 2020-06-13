@@ -296,8 +296,6 @@ ggplot(data = expire_date2, mapping = aes(x=as.Date(ExpireDate, format="%d/%m/%Y
 # group_by province
 # summarize average minimum salary
 
-
-
 # first convert Wage_Min from factor to numeric/integer
 smartjob_unique <- add_column(smartjob_unique, Wage_Min_num = NA, .after = "Wage_Min")
 
@@ -317,6 +315,9 @@ province_salary
 spread(province_salary, key = SalaryRequireUnitName, value = avg_min_wage) -> province_salary2
 
 province_salary2
+
+# change ALL numbers in dataframe to two decimal places
+province_salary2[,2:4] <- round(province_salary2[,2:4], digits = 2)
 
 
 
