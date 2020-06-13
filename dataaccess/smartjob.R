@@ -248,7 +248,7 @@ ggplot(data = mygrid2, mapping = aes(xmin = col, ymin = row, xmax = col + 1, yma
            title = 'Job Applicants by Province', 
            subtitle = 'Bangkok is an outlier') 
 
-##### Other Categories (To Do) ######
+#####----------------- Other Categories (To Do) -------------- ######
 # - SalaryRequireUnitName
 smartjob_unique %>% group_by(SalaryRequireUnitName) %>% tally(sort = TRUE)
 # - TypeName
@@ -258,10 +258,14 @@ smartjob_unique %>% group_by(TypeName) %>% tally(sort = TRUE)
 # Need to create brackets - too many rows
 smartjob_unique %>% group_by(Wage_Min) %>% tally(sort = TRUE)
 
-###### Explain How Jobs Expire ######
+
+
+###### ----------------Explain How Jobs Expire ------------------######
 smartjob_unique %>% group_by(ExpireDate) %>% tally(sort = TRUE) -> expire_date
 
 expire_date[order(as.Date(expire_date$ExpireDate, format="%d/%m/%Y")),] -> expire_date2
+
+expire_date2
 
 ### Highlight Expiration Date on Jobs, relative to "today" (June 12, 2020)
 ggplot(data = expire_date2, mapping = aes(x=as.Date(ExpireDate, format="%d/%m/%Y"), y=n)) 
@@ -280,4 +284,37 @@ ggplot(data = expire_date2, mapping = aes(x=as.Date(ExpireDate, format="%d/%m/%Y
     + geom_vline(xintercept = as.numeric(as.Date("12/06/2563", format="%d/%m/%Y")), linetype=4, color = 'red') 
     + geom_text(aes(label=n), nudge_x = 1, nudge_y = -1) 
     + labs(x="Job Post Expiration Dates", y="Number of Posting", title="Job Posting: May 7th - Aug 6th, 2020", subtitle = "Today: June 12, 2020")
+
+
+
+###### ----------------[User ใช้เวลาเฉลี่ยเท่าไร] ------------------######
+# UNSURE
+
+###### ----------------[User แต่ละที่ เรียกเงินเดือนกันเท่าไร] ------------------######
+
+# Filter by TypeName (wage type)
+# group_by province
+# summarize average minimum salary
+
+
+
+# first convert Wage_Min from factor to numeric/integer
+smartjob_unique <- add_column(smartjob_unique, Wage_Min_num = NA, .after = "Wage_Min")
+
+### Formatting Issues: 10,000.00 and 320 in the same column use gsub()
+smartjob_unique$Wage_Min_num <- as.numeric(gsub(",", "", smartjob_unique$Wage_Min))
+
+### Long table of ProvinceName by SalaryRequireUnitName (need to WIDEN it)
+smartjob_unique %>% 
+    group_by(ProvinceName, SalaryRequireUnitName) %>% 
+    summarize(avg_min_wage = mean(Wage_Min_num)) -> province_salary
+
+province_salary
+
+
+##### REQUIRE MANYCHAT or MIXPANEL or POSTGRESQL access [User ที่กดเข้ามามีแนวโน้มที่จะใช้ตัวเลือก หาคน หางาน หรือ ไม่เลือกตัวเลือกใด ๆ เลยเป็นเท่าไร] #######
+##### REQUIRE MANYCHAT or MIXPANEL or POSTGRESQL access [User กี่ % ที่กดเข้าไปดูงานที่เราส่งไปให้จริง ๆ] ######
+##### REQUIRE MANYCHAT or MIXPANEL or POSTGRESQL access [User หยุดหรือใช้เวลาที่ flow ไหนนานสุด] #######
+
+##### SEE GSHEET - JOB SEEKER BY JOB CATEGORY [User ที่หางานส่วนใหญ่จะเลือกค้นหางานประเภทไหน] ######
 
