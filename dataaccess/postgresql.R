@@ -4,7 +4,7 @@
 ### PREREQUISITE: Need PostgreSQL database up and running
 
 # load data
-file(load = "saku.RData")
+load(file = "saku.RData")
 
 ### RPostgres
 install.packages('RPostgres')
@@ -74,6 +74,13 @@ result <- as.data.frame(carQuery)
 # when run dbListTables(con), should see two tables 'cars' and 'my_new_table'
 dbWriteTable(con, 'my_new_table', result)
 
+###### TRY AGAIN (Ben Login) Specific Postgres Instance #######
 
+library(DBI)
 
-
+# changed to B's credentials
+con <- dbConnect(RPostgres::Postgres(),dbname = 'jobsbot', 
+                host = '35.234.17.105', 
+                port = 5432, 
+                user = 'USER', 
+                password = 'PASSWORD')
