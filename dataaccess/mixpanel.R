@@ -31,3 +31,25 @@ mixpanelGetData(account, method="funnels/list/", args=list(), data=TRUE)
 ## Download https://mixpanXXXXXXXXXXX2.0/funnels/list/?... parse data...
 ## [1] "[]"
 
+### Weekly retention as percentages
+# launch event: May 18, 2020
+retentions <- mixpanelGetRetention(account, 
+                            born_event="AppInstall", 
+                            event = "WatchedItem", 
+                            from = 20200517, 
+                            to = 20200617, 
+                            unit = "week")
+
+# Error: number of items to replace is not a multiple of replacement length
+
+mixpanelGetFunnelList(account)
+## Download https://mixpanXXXXXXXXXXX2.0/funnels/list/?... parse data...
+list()
+
+
+#### NOTE creating Mixpanel account is simply a list with four fields....
+
+#### Alternative Route: Download CSV data directly: June 17, 2020
+
+# Data Management -> Lexicon (All Events and Properties; All User Profile Properties) # does NOT appear helpful
+# Users -> 132 Profile (csv)
