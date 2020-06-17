@@ -95,4 +95,24 @@ dbListTables(con)
 
 # separate from previous smart_job_data frame
 smart_job_data2 <- dbReadTable(con, "smartjob")
+definition_study_level <- dbReadTable(con, "definition_study_level")
+jobpost <- dbReadTable(con, "jobpost")
+employer <- dbReadTable(con, "employer")
+definition_work_exp <- dbReadTable(con, "definition_work_exp")
+definition_job_type <- dbReadTable(con, "definition_job_type")
+definition_job_sex <- dbReadTable(con, "definition_job_sex")
+test_user <- dbReadTable(con, "test_user")
+
+
+
+
+# areas for table joins
+definition_study_level & jobpost
+definition_work_exp & jobpost
+definition_job_type & jobpost
+definition_job_sex & jobpost
+test_user & employer
+
+# separate thing
+smart_job_data2 
 
