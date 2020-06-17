@@ -84,3 +84,15 @@ con <- dbConnect(RPostgres::Postgres(),dbname = 'jobsbot',
                 port = 5432, 
                 user = 'USER', 
                 password = 'PASSWORD')
+
+## success, saving all 7 tables into their own objects in R
+dbListTables(con)
+
+# primarily Data Dictionary
+[1] "definition_study_level" "jobpost"                "employer"              
+[4] "definition_work_exp"    "definition_job_type"    "definition_job_sex"    
+[7] "smartjob"               "test_user" 
+
+# separate from previous smart_job_data frame
+smart_job_data2 <- dbReadTable(con, "smartjob")
+
