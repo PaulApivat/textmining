@@ -137,6 +137,30 @@ employer_test <- employer %>%
 # change column name
 names(jobpost_join)[25:28] <- c("studylevel", "workexp", "jobtype", "jobsex")
 
+### Visualizations ###
+
+# Job Posting by Gender
+jobpost_join %>% 
+    ggplot(aes(x= jobsex, fill=jobsex)) 
+    + geom_bar(stat = 'count', width = 0.7) 
+    + theme(axis.text.x = element_text(family = 'Krub'), 
+            legend.text = element_text(family = 'Krub')) 
+    + labs(title = 'Job Posting by Gender', x = 'Gender', fill = 'Gender')
+
+# Job Posting by Education Level requirement
+jobpost_join %>% 
+    group_by(studylevel) %>% 
+    tally(sort = TRUE) %>% 
+    ggplot(aes(x=reorder(studylevel, n), y=n, fill=studylevel)) 
+    + geom_bar(stat = 'identity', width = 0.7) 
+    + theme(axis.text.x = element_text(family = 'Krub'), 
+            legend.text = element_text(family = 'Krub')) 
+    + labs(title = 'Job Posting by Education Requirement', 
+            x = 'Education Level', 
+            fill = 'Education Level')
+
+
+
 # separate thing
 smart_job_data2 
 
