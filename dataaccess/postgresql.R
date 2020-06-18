@@ -134,6 +134,9 @@ jobpost_join <- jobpost_join %>%
 employer_test <- employer %>% 
     left_join(test_user, by = 'manychat_id')
 
+# change column name
+names(jobpost_join)[25:28] <- c("studylevel", "workexp", "jobtype", "jobsex")
+
 # separate thing
 smart_job_data2 
 
