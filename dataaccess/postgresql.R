@@ -129,7 +129,10 @@ jobpost_join <- jobpost_join %>%
 jobpost_join <- jobpost_join %>%
     inner_join(definition_job_sex, by = c('job_sex' = 'id'))
 
-
+# test_user & employer
+# note: left_join instead of inner_join
+employer_test <- employer %>% 
+    left_join(test_user, by = 'manychat_id')
 
 # separate thing
 smart_job_data2 
