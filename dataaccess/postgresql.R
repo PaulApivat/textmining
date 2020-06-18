@@ -160,6 +160,19 @@ jobpost_join %>%
             y = 'Number of Posts', 
             fill = 'Education Level')
 
+# Job Posting by Work Experience requirement
+jobpost_join %>% 
+    group_by(workexp) %>% 
+    tally(sort = TRUE) %>% 
+    ggplot(aes(x=reorder(workexp, n), y=n, fill=workexp)) 
+    + geom_bar(stat = 'identity', width = 0.7) 
+    + theme(axis.text.x = element_text(family = 'Krub'), 
+            legend.text = element_text(family = 'Krub')) 
+    + labs(title = 'Job Posting by Work Experience (n=52)', 
+            x = 'Work Experience', 
+            y = 'Number of Posts', 
+            fill = 'Work Experience')
+
 
 
 
