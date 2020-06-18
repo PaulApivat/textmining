@@ -155,9 +155,12 @@ jobpost_join %>%
     + geom_bar(stat = 'identity', width = 0.7) 
     + theme(axis.text.x = element_text(family = 'Krub'), 
             legend.text = element_text(family = 'Krub')) 
-    + labs(title = 'Job Posting by Education Requirement', 
+    + labs(title = 'Job Posting by Education Requirement (n=52)', 
             x = 'Education Level', 
+            y = 'Number of Posts', 
             fill = 'Education Level')
+
+
 
 
 
