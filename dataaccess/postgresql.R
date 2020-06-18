@@ -113,6 +113,24 @@ definition_job_type & jobpost
 definition_job_sex & jobpost
 test_user & employer
 
+# definition_study_level & jobpost
+jobpost_join <- jobpost %>%
+    inner_join(definition_study_level, by = c('study_level' = 'id'))
+
+# definition_work_exp & jobpost
+jobpost_join <- jobpost_join %>%
+    inner_join(definition_work_exp, by = c('work_exp' = 'n_year')) 
+
+# definition_job_type & jobpost
+jobpost_join <- jobpost_join %>%
+    inner_join(definition_job_type, by = c('job_type' = 'id')) 
+
+# definition_job_sex & jobpost
+jobpost_join <- jobpost_join %>%
+    inner_join(definition_job_sex, by = c('job_sex' = 'id'))
+
+
+
 # separate thing
 smart_job_data2 
 
