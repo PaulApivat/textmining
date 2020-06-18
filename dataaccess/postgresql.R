@@ -173,7 +173,33 @@ jobpost_join %>%
             y = 'Number of Posts', 
             fill = 'Work Experience')
 
+# Job Posting by Job Type
+jobpost_join %>% 
+    ggplot() 
+    + aes(x=jobtype) 
+    + geom_bar(stat = 'count') 
+    + theme(axis.text.x = element_text(family = 'Krub'))
 
+
+#### Other Visualizations ####
+
+# filter by unique jobpost_id
+# distribution of minimum age required
+# substitute AGE_MAX
+# need to .keep_all to have age_min to analyze
+jobpost_join %>% 
+    distinct(jobpost_id, .keep_all = TRUE) %>% 
+    ggplot(aes(x=age_min)) 
+    + geom_density()
+
+## job qualification group_by and tally
+jobpost_join %>% 
+    group_by(job_qualification) %>% 
+    tally(sort = TRUE)
+
+####### ADDITIONAL JOIN: jobpost_join with employer_test by manychat_id
+### select only variable of interest in employer_test
+# manychat_id, company_name (that made a post), role and name of person who made the post?
 
 
 
