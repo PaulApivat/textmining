@@ -201,6 +201,20 @@ jobpost_join %>%
 ### select only variable of interest in employer_test
 # manychat_id, company_name (that made a post), role and name of person who made the post?
 
+# look at job_posts by employer_Role
+
+employer_test_1 <- employer_test
+
+employer_test_1$role <- ifelse((employer_test_1$role=='🙋‍♀️เจ้าของกิจการ'), "เจ้าของกิจการ", employer_test_1$role)
+
+
+# treemap, employer_Role superseding job_qualification
+
+# bar chart of job_qualifications, grouped by role
+ggplot(post_join_employer, aes(fill=role, y=age_min, x=job_qualification)) + geom_bar(position = 'dodge', stat = 'identity') + theme(axis.text.x = element_text(family = 'Krub', angle = 45, hjust = 1), legend.text = element_text(family = 'Krub'))
+
+# basic treemap (no thai font!)
+treemap(tree_post, index = c("role", "job_qualification"), vSize = 'n', type = "index") 
 
 
 # separate thing
