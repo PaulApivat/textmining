@@ -217,6 +217,7 @@ ggplot(post_join_employer, aes(fill=role, y=age_min, x=job_qualification)) + geo
 treemap(tree_post, index = c("role", "job_qualification"), vSize = 'n', type = "index") 
 
 #### NOTE: there is no good way to visualize role and job_qualification
+#### NOTE: treemap package does not have Thai alphabet
 
 
 #### DATA CLEANING #####
@@ -259,6 +260,15 @@ post_join_employer %>% group_by(role) %>% tally(sort = TRUE)
 4 ‍ผู้จัดการแผนก      2
 
 
+##### ALTERNATIVE TO TREEMAP - Facet_Grid Bar Chart
+
+# See preferences of "role" re "workexp" (can also switch)
+ggplot(tree_post, aes(x=role, y=n, fill=role)) 
+    + geom_bar(stat = 'identity') 
+    + facet_grid(~workexp) 
+    + theme(axis.text.x = element_text(family = 'Krub', angle = 45, hjust=1), 
+            strip.text.x = element_text(family = 'Krub'), 
+            legend.text = element_text(family = 'Krub'))
 
 
 
