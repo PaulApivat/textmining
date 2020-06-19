@@ -232,6 +232,34 @@ post_join_employer$role <- gsub(rmSpec, "", post_join_employer$role)
 rmSpec2 <- "💁|‍|♂️"
 post_join_employer$role <- gsub(rmSpec2, "", post_join_employer$role)
 
+### BEFORE EMOJI
+
+employer_test %>% group_by(role) %>% tally(sort = TRUE)
+# A tibble: 8 x 2
+  role              n
+  <chr>         <int>
+1 🙋‍♀️เจ้าของกิจการ    28
+2 เจ้าของกิจการ       9
+3 🙋‍♂️HR              6
+4 อื่นๆ               6
+5 💁‍♂️อื่นๆ             4
+6 HR                4
+7 💁‍♀️ผู้จัดการแผนก      2
+8 ผู้จัดการแผนก        2
+
+### AFTER EMOJI
+
+post_join_employer %>% group_by(role) %>% tally(sort = TRUE)
+# A tibble: 4 x 2
+  role            n
+  <chr>       <int>
+1 ‍เจ้าของกิจการ    36
+2 ‍HR             10
+3 ‍อื่นๆ             4
+4 ‍ผู้จัดการแผนก      2
+
+
+
 
 
 # separate thing
