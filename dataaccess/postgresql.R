@@ -216,6 +216,23 @@ ggplot(post_join_employer, aes(fill=role, y=age_min, x=job_qualification)) + geo
 # basic treemap (no thai font!)
 treemap(tree_post, index = c("role", "job_qualification"), vSize = 'n', type = "index") 
 
+#### NOTE: there is no good way to visualize role and job_qualification
+
+
+#### DATA CLEANING #####
+
+# REMOVE EMOJI Business Owner
+remove_emoticon <- post_join_employer$role[2]
+rmSpec <- "🙋|♀️" 
+s.rem <- gsub(rmSpec, "", remove_emoticon)
+post_join_employer$role <- gsub(rmSpec, "", post_join_employer$role)
+
+# REMOVE EMOJI อื่นๆ
+# put | between every emoji, 'or' logical
+rmSpec2 <- "💁|‍|♂️"
+post_join_employer$role <- gsub(rmSpec2, "", post_join_employer$role)
+
+
 
 # separate thing
 smart_job_data2 
