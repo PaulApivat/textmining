@@ -275,6 +275,28 @@ ggplot(tree_post, aes(x=role, y=n, fill=role))
             fill = "Hiring Roles")
 
 
+#### Salary Ranges
+# Table of Avg Salary, Min, Max by Role
+post_join_employer %>% 
+    group_by(role) %>% 
+    summarize(avg_salary = mean(min_salary), 
+                    min = min(min_salary), 
+                    max = max(min_salary))
+
+# Facet Bar Chart: Salary Types by Role
+# tidy data
+post_join_employer %>% 
+    group_by(role) %>% 
+    summarize(avg_salary = mean(min_salary), min = min(min_salary), max = max(min_salary)) %>% 
+    gather("avg_salary", "min", "max", key = "salary", value = "amount") %>% 
+    ggplot(aes(x=role, y=amount, fill=role)) 
+        + geom_bar(stat = 'identity') 
+        + facet_grid(~salary) 
+        + theme(axis.text.x = element_text(family = 'Krub', angle=45, hjust=1), legend.text = element_text(family = 'Krub')) 
+        + labs(title = 'Salary Requirement by Role', y = 'Monthly Salary (Baht)', x = 'Hiring Person Role')
+
+
+
 
 
 # separate thing
