@@ -331,6 +331,17 @@ post_join_employer %>%
         + labs(title = "Job Postings by Minimum Salary Statistics")
 
 
+# different Age Min and Max
+post_join_employer %>% 
+    select(role, age_min, age_max) %>% 
+    gather("age_max", "age_min", key = 'age_type', value = 'age') %>% 
+    ggplot(aes(x=age_type, y=age, color=age_type)) 
+        + geom_point(position = 'jitter') 
+        + geom_hline(yintercept = 22.27, color='#339966') 
+        + geom_hline(yintercept = 39.83, color='red') 
+        + annotate("text", x = 2, y = 45, color = "red", label = "Average Max Age: 39 yrs") 
+        + annotate("text", x = 1, y = 15, color = "#339966", label = "Average Min Age: 22 yrs") 
+        + labs(x="Max and Min Age", y='Age', fill='Age Range', title = "Job Posting Age Spread")
 
 
 # separate thing
