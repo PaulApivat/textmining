@@ -339,9 +339,34 @@ post_join_employer %>%
         + geom_point(position = 'jitter') 
         + geom_hline(yintercept = 22.27, color='#339966') 
         + geom_hline(yintercept = 39.83, color='red') 
+        # Annotation
         + annotate("text", x = 2, y = 45, color = "red", label = "Average Max Age: 39 yrs") 
         + annotate("text", x = 1, y = 15, color = "#339966", label = "Average Min Age: 22 yrs") 
         + labs(x="Max and Min Age", y='Age', fill='Age Range', title = "Job Posting Age Spread")
+
+
+# Qualifications Wordcloud
+install.packages('wordcloud')
+library(wordcloud)
+
+qual_vector <- as.vector(post_join_employer$job_qualification)
+
+# create dataframe specifically for wordcloud
+post_join_employer %>% 
+    group_by(job_qualification) %>% 
+    tally(sort = TRUE) -> job_qual
+
+# black background (base r)
+par(bg='black')
+
+# the wordcloud
+wordcloud(job_qual$job_qualification, 
+                        job_qual$n, 
+                        colors = terrain.colors(length(job_qual$job_qualification), 
+                        alpha=0.9), 
+                        rot.per = 0.3, 
+                        family = 'Krub')
+
 
 
 # separate thing
