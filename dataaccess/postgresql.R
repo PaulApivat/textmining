@@ -269,6 +269,11 @@ ggplot(tree_post, aes(x=role, y=n, fill=role))
     + theme(axis.text.x = element_text(family = 'Krub', angle = 45, hjust=1), 
             strip.text.x = element_text(family = 'Krub'), 
             legend.text = element_text(family = 'Krub'))
+    + labs(title = "Work Experience Requirement by Hiring Manager", 
+            x = "Type of Hiring Manager", 
+            y = "Number of Job Posts", 
+            fill = "Hiring Roles")
+
 
 
 
