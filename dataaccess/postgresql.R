@@ -305,6 +305,32 @@ post_join_employer %>%
         + theme(axis.text.x = element_text(family = 'Krub', angle = 45, hjust=1), legend.text = element_text(family = 'Krub'), strip.text.x = element_text(family = 'Krub')) 
         + labs(title = 'Gender Requirement by Hiring Role', y = 'Number of Posts', x = 'Hiring Roles', fill = 'Hiring Roles')
 
+# Facet Bar Chart: Education Requirements by Hiring Role
+post_join_employer %>% 
+    group_by(role, studylevel) %>% 
+    tally(sort = T) %>% 
+    ggplot(aes(x=role, y=n, fill=role)) 
+        + geom_bar(stat = 'identity') 
+        + facet_grid(~studylevel) 
+        + theme(axis.text.x = element_text(family = 'Krub', angle = 45, hjust=1), 
+                legend.text = element_text(family = 'Krub'), 
+                strip.text.x = element_text(family = 'Krub')) 
+        + labs(title = 'Education Requirement by Study Level', 
+                y = 'Number of Posts', 
+                x = 'Hiring Roles', 
+                fill = 'Hiring Roles')
+
+
+# different salary levels
+post_join_employer %>% 
+    summarize(mean = mean(min_salary), min = min(min_salary), max = max(min_salary)) %>% 
+    gather("mean", "min", "max", key = "stat", value = "amount") %>% 
+    ggplot(aes(x=stat, y=amount, fill=stat)) + geom_bar(stat = 'identity', position = 'dodge') 
+        + geom_text(aes(label=format(round(amount, 2), nsmall = 2)), vjust=-0.5) 
+        + labs(x="Minimum Salary Spread", y="Monthly Salary (Baht)") 
+        + labs(title = "Job Postings by Minimum Salary Statistics")
+
+
 
 
 # separate thing
