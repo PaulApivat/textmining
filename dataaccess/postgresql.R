@@ -295,7 +295,15 @@ post_join_employer %>%
         + theme(axis.text.x = element_text(family = 'Krub', angle=45, hjust=1), legend.text = element_text(family = 'Krub')) 
         + labs(title = 'Salary Requirement by Role', y = 'Monthly Salary (Baht)', x = 'Hiring Person Role')
 
-
+# Facet Bar Chart: Gender Requirement by Role
+post_join_employer %>% 
+    group_by(role, jobsex) %>% 
+    tally(sort = T) %>% 
+    ggplot(aes(x=role, y=n, fill=role)) 
+        + geom_bar(stat = 'identity') 
+        + facet_grid(~jobsex) 
+        + theme(axis.text.x = element_text(family = 'Krub', angle = 45, hjust=1), legend.text = element_text(family = 'Krub'), strip.text.x = element_text(family = 'Krub')) 
+        + labs(title = 'Gender Requirement by Hiring Role', y = 'Number of Posts', x = 'Hiring Roles', fill = 'Hiring Roles')
 
 
 
