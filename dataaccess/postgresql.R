@@ -411,6 +411,13 @@ employer_info %>%
     filter(!grepl("([0-9])\\1", tolower(Employer_Email))) %>%
     # 4732 left (filter out Thai alphabets)
     filter(!grepl("^[ก-๙]", tolower(Employer_Email))) %>% 
+    # 4569 left 
+    # 2890 left 
+    filter(!grepl("123", tolower(Employer_Email))) %>% 
+    filter(!grepl("([a-z])\\1([a-z])\\2([a-z])\\3", tolower(Employer_Email))) %>% 
+    filter(!grepl("([a-z])\\1([a-z])\\2", tolower(Employer_Email))) %>% 
+    filter(!grepl("([a-z])\\1", tolower(Employer_Email))) %>% 
+    filter(!grepl("-@", tolower(Employer_Email))) %>% 
     view()
 
 
