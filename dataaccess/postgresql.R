@@ -372,3 +372,47 @@ wordcloud(job_qual$job_qualification,
 # separate thing
 smart_job_data2 
 
+### Filtering SPAM Email ###
+
+## create dataframe with just Employer_Email, Employer_EmployerName
+## n = 6428
+employer_info <- smart_job_data2 %>% 
+    select(Employer_OrganizationName, 
+            Employer_EmployerName, 
+            Employer_Telephone, 
+            Employer_Email)
+
+## filter out xxx@xxx.com
+## filter out 1026 rows
+employer_info %>% filter(grepl("xx", employer_info$Employer_Email)) %>% view()
+
+
+## filter out 111@hotmail, but potential high type-2 error
+## filter out 483
+employer_info %>% filter(grepl("([0-9])\\1", tolower(Employer_Email))) %>% view()
+
+## filter out 20 1111@hotmail.com, 000000@hotmail.com but also aifa88888@gmail.com
+employer_info %>% filter(grepl("([0-9])\\1([0-9])\\2", tolower(Employer_Email))) %>% view()
+
+## filter out (only) 5 ; 000000@hotmail.com
+employer_info %>% filter(grepl("([0-9])\\1([0-9])\\2([0-9])\\3", tolower(Employer_Email))) %>% view()
+
+
+##### NOTE !grepl()  not  grepl()
+    # 6428 total
+employer_info %>% 
+    # 5402 left
+    filter(!grepl("xx", employer_info$Employer_Email)) %>% 
+    # 5397 left
+    filter(!grepl("([0-9])\\1([0-9])\\2([0-9])\\3", tolower(Employer_Email))) %>% 
+    # 5382 left
+    filter(!grepl("([0-9])\\1([0-9])\\2", tolower(Employer_Email))) %>% 
+    # 4922 left
+    filter(!grepl("([0-9])\\1", tolower(Employer_Email))) %>%
+    view()
+
+
+# 1st Method
+
+# 2nd Method
+
