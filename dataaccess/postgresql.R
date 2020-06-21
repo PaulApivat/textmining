@@ -404,6 +404,7 @@ employer_info %>%
     # 5402 left
     filter(!grepl("xx", employer_info$Employer_Email)) %>% 
     # 5397 left
+    # filtering out consecutive numbers
     filter(!grepl("([0-9])\\1([0-9])\\2([0-9])\\3", tolower(Employer_Email))) %>% 
     # 5382 left
     filter(!grepl("([0-9])\\1([0-9])\\2", tolower(Employer_Email))) %>% 
@@ -414,6 +415,7 @@ employer_info %>%
     # 4569 left 
     # 2890 left 
     filter(!grepl("123", tolower(Employer_Email))) %>% 
+    # filtering out consecutive letters
     filter(!grepl("([a-z])\\1([a-z])\\2([a-z])\\3", tolower(Employer_Email))) %>% 
     filter(!grepl("([a-z])\\1([a-z])\\2", tolower(Employer_Email))) %>% 
     filter(!grepl("([a-z])\\1", tolower(Employer_Email))) %>% 
@@ -421,7 +423,18 @@ employer_info %>%
     view()
 
 
-# 1st Method
+# 1st Method Email Filter (#2890 rows left from 6428)
+employer_info %>% 
+    filter(!grepl("xx", employer_info$Employer_Email)) %>% 
+    filter(!grepl("([a-zA-Z0-9_])\\1", tolower(Employer_Email))) %>% 
+    filter(!grepl("^[ก-๙]", tolower(Employer_Email))) %>% 
+    filter(!grepl("123", tolower(Employer_Email))) %>% 
+    filter(!grepl("-@", tolower(Employer_Email))) %>% 
+    view()
 
 # 2nd Method
 
+
+## CLEAN TELEPHONE NUMBERS
+# get rid of hyphens
+gsub("-", "", employer_info$Employer_Telephone)
