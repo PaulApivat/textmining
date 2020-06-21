@@ -426,6 +426,8 @@ employer_info %>%
 # 1st Method Email Filter (#2890 rows left from 6428)
 employer_info %>% 
     filter(!grepl("xx", employer_info$Employer_Email)) %>% 
+    # regex \\1 indicates first remembered pattern of ([a-zA-Z0-9_]); 
+    # consecutive letters and numbers
     filter(!grepl("([a-zA-Z0-9_])\\1", tolower(Employer_Email))) %>% 
     filter(!grepl("^[ก-๙]", tolower(Employer_Email))) %>% 
     filter(!grepl("123", tolower(Employer_Email))) %>% 
