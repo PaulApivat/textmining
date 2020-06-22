@@ -11,6 +11,7 @@ install.packages('RPostgres')
 
 ### Connecting to specific Postgres Instance
 library(DBI)
+library(tidyverse)
 
 
 
@@ -433,6 +434,21 @@ employer_info %>%
     filter(!grepl("123", tolower(Employer_Email))) %>% 
     filter(!grepl("-@", tolower(Employer_Email))) %>% 
     view()
+
+# prepare to test emails as Ham or Spam
+# create email_quality column based on my filter
+# 0 = spam, 1 = ham
+# note use of grepl() instead of !grepl()
+employer_info$email_quality <- ifelse(grepl("xx", employer_info$Employer_Email), 0, employer_info$email_quality)
+employer_info$email_quality <- ifelse(grepl("([a-zA-Z0-9_])\\1", tolower(employer_info$Employer_Email)), 0, employer_info$email_quality)
+employer_info$email_quality <- ifelse(grepl("^[ก-๙]", tolower(employer_info$Employer_Email)), 0, employer_info$email_quality)
+employer_info$email_quality <- ifelse(grepl("123", tolower(employer_info$Employer_Email)), 0, employer_info$email_quality)
+employer_info$email_quality <- ifelse(grepl("-@", tolower(employer_info$Employer_Email)), 0, employer_info$email_quality)
+# change all NA to 1
+employer_info$email_quality <- ifelse(is.na(employer_info$email_quality), 1, employer_info$email_quality)
+
+
+
 
 # 2nd Method
 
