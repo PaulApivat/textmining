@@ -473,8 +473,12 @@ View(employer_info %>% group_by(Employer_EmployerName, Employer_Email) %>% tally
 # Even with email_quality, 3227 unique Names and Emails remain
 # Next: Filter for email_quality == 1, read to csv
 View(employer_info %>% group_by(Employer_EmployerName, Employer_Email, email_quality) %>% tally(sort = TRUE))
-
-# 2nd Method
+# Filter by email_quality
+View(employer_info %>% group_by(Employer_EmployerName, Employer_Email, email_quality) %>% tally(sort = TRUE) %>% filter(email_quality==1))
+# save into new data frame
+employer_info %>% group_by(Employer_EmployerName, Employer_Email, email_quality) %>% 
+    tally(sort = TRUE) %>% 
+    filter(email_quality==1) -> employer_info1
 
 
 ## CLEAN TELEPHONE NUMBERS
