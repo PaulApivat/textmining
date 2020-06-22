@@ -441,8 +441,10 @@ employer_info %>%
 
 # take out (not filter out) all Thai alphabets in a separate step
 # 4892 entries
-View(gsub("[ก-๙]", "", employer_info1$Employer_Email))
+employer_info1$Employer_Email <- gsub("[ก-๙]", "", employer_info1$Employer_Email)
 
+# filter only unique emails (but consider 4892 - legit email)
+View(distinct(employer_info1, employer_info1$Employer_Email, .keep_all = TRUE))
 
 
 # prepare to test emails as Ham or Spam
