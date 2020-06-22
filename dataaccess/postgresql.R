@@ -425,16 +425,15 @@ employer_info %>%
     view()
 
 
-# 1st Method Email Filter (#2890 rows left from 6428)
+# 1st Method Email Filter (# rows left from 6428)
 employer_info %>% 
-    filter(!grepl("xx", employer_info$Employer_Email)) %>%    # 5402 left
+    filter(!grepl("xx", employer_info$Employer_Email)) %>%    # 5402 left (1026 out)
     # regex \\1 indicates first remembered pattern of ([a-zA-Z0-9_]); 
-    # consecutive letters and numbers
-    # filter(!grepl("([a-zA-Z0-9_])\\1", tolower(Employer_Email))) %>% 
-    filter(!grepl("([a-z0-9\\d])\\1\\1", tolower(Employer_Email))) %>%     # 5080 left
+    # Three consecutive letters and numbers
+    filter(!grepl("([a-z0-9\\d])\\1\\1", tolower(Employer_Email))) %>%     # 5080 left  (1348 out)
     # filter(!grepl("^[ก-๙]", tolower(Employer_Email))) %>% 
-    filter(!grepl("123", tolower(Employer_Email))) %>%      # 4915 left
-    filter(!grepl("-@", tolower(Employer_Email)))            # 4892 left
+    filter(!grepl("123", tolower(Employer_Email))) %>%      # 4915 left   (1513 out)
+    filter(!grepl("-@", tolower(Employer_Email)))            # 4892 left   (1536 out)
     -> employer_info1
 
 
@@ -452,15 +451,28 @@ View(distinct(employer_info1, employer_info1$Employer_Email, .keep_all = TRUE))
 # 0 = spam, 1 = ham
 # note use of grepl() instead of !grepl()
 employer_info$email_quality <- ifelse(grepl("xx", employer_info$Employer_Email), 0, employer_info$email_quality)
-employer_info$email_quality <- ifelse(grepl("([a-zA-Z0-9_])\\1", tolower(employer_info$Employer_Email)), 0, employer_info$email_quality)
-employer_info$email_quality <- ifelse(grepl("^[ก-๙]", tolower(employer_info$Employer_Email)), 0, employer_info$email_quality)
+# Three consecutive letters and numbers
+employer_info$email_quality <- ifelse(grepl("([a-z0-9\\d])\\1\\1", tolower(employer_info$Employer_Email)), 0, employer_info$email_quality)
 employer_info$email_quality <- ifelse(grepl("123", tolower(employer_info$Employer_Email)), 0, employer_info$email_quality)
 employer_info$email_quality <- ifelse(grepl("-@", tolower(employer_info$Employer_Email)), 0, employer_info$email_quality)
 # change all NA to 1
 employer_info$email_quality <- ifelse(is.na(employer_info$email_quality), 1, employer_info$email_quality)
 
+# remove thai alphabet
+employer_info$Employer_Email <- gsub("[ก-๙]", "", employer_info$Employer_Email)
 
 
+#### Figuring total portions to compare
+
+# Compare Distinct Employer Name vs Email
+View(employer_info %>% distinct(Employer_EmployerName))     # 3208 unique Names
+View(employer_info %>% distinct(Employer_Email))            # 2275 unique Emails
+
+View(employer_info %>% group_by(Employer_EmployerName, Employer_Email) %>% tally(sort = TRUE))    # 3227 unique Names with Emails
+
+# Even with email_quality, 3227 unique Names and Emails remain
+# Next: Filter for email_quality == 1, read to csv
+View(employer_info %>% group_by(Employer_EmployerName, Employer_Email, email_quality) %>% tally(sort = TRUE))
 
 # 2nd Method
 
