@@ -5,12 +5,14 @@
 const mailgun = require('mailgun-js');
 
 var api_key = "API KEY"
-var domain = "DOMAIN"
+var domain = "Domain"
 var mg = mailgun({ apiKey: api_key, domain: domain })
 
+
+
 var data = {
-    from: 'Excited Tester <me@samples.mailgun.org>',
-    to: 'user@gmail.com',
+    from: 'Tester <me@samples.mailgun.org>',
+    to: "paul@gmail.com",
     subject: 'Saku Testing',
     text: 'Testing some mailgun api'
 };
