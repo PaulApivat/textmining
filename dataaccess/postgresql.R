@@ -427,14 +427,23 @@ employer_info %>%
 
 # 1st Method Email Filter (#2890 rows left from 6428)
 employer_info %>% 
-    filter(!grepl("xx", employer_info$Employer_Email)) %>% 
+    filter(!grepl("xx", employer_info$Employer_Email)) %>%    # 5402 left
     # regex \\1 indicates first remembered pattern of ([a-zA-Z0-9_]); 
     # consecutive letters and numbers
-    filter(!grepl("([a-zA-Z0-9_])\\1", tolower(Employer_Email))) %>% 
-    filter(!grepl("^[ก-๙]", tolower(Employer_Email))) %>% 
-    filter(!grepl("123", tolower(Employer_Email))) %>% 
-    filter(!grepl("-@", tolower(Employer_Email))) %>% 
-    view()
+    # filter(!grepl("([a-zA-Z0-9_])\\1", tolower(Employer_Email))) %>% 
+    filter(!grepl("([a-z0-9\\d])\\1\\1", tolower(Employer_Email))) %>%     # 5080 left
+    # filter(!grepl("^[ก-๙]", tolower(Employer_Email))) %>% 
+    filter(!grepl("123", tolower(Employer_Email))) %>%      # 4915 left
+    filter(!grepl("-@", tolower(Employer_Email)))            # 4892 left
+    -> employer_info1
+
+
+
+# take out (not filter out) all Thai alphabets in a separate step
+# 4892 entries
+View(gsub("[ก-๙]", "", employer_info1$Employer_Email))
+
+
 
 # prepare to test emails as Ham or Spam
 # create email_quality column based on my filter
