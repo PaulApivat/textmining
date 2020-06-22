@@ -8,11 +8,12 @@ load(file = "saku.RData")
 
 ### RPostgres
 install.packages('RPostgres')
+install.packages('IMmailgun')
 
 ### Connecting to specific Postgres Instance
 library(DBI)
 library(tidyverse)
-
+library(IMmailgun)
 
 
 con <- dbConnect(RPostgres::Postgres(), 
