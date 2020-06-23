@@ -117,6 +117,10 @@ THAI.map %>%
 ggplot() + geom_polygon(data = bkk_fortified, mapping = aes(x = long, y = lat, group = group), fill="#69b3a2", color="white", alpha = .5) + geom_point(data = thai.map2, aes(x=lat, y=long, color="red", alpha = .9))
 
 # Conclusion ----
-thai.map %>% head()
+# best result
+THAI.map %>% 
+    ggplot() 
+    + geom_map(map = THAI.map, aes(x=long, y=lat, map_id = region), fill='white', color='black') 
+    + geom_point(data = thai.map2, aes(x=long, y=lat, color="red", alpha = .9))
     
     
