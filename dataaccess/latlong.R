@@ -11,6 +11,20 @@ load(file = 'saku.RData')
 
 # Data Manipulation ----
 
+# load relevant dataframes
+View(jobpost)
+
+# subset into dataframe
+utm <- data.frame(jobpost$utm_x, jobpost$utm_y)
+str(utm)
+
+# handle missing values before creating spatial objects
+View(utm)
+utm <- utm[-50,]
+
+# create spatial object
+coordinates(utm) <- ~jobpost.utm_x + jobpost.utm_y
+str(utm)
 
 # Visualization ----
 
