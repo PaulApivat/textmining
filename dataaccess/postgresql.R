@@ -470,15 +470,28 @@ View(employer_info %>% distinct(Employer_Email))            # 2275 unique Emails
 
 View(employer_info %>% group_by(Employer_EmployerName, Employer_Email) %>% tally(sort = TRUE))    # 3227 unique Names with Emails
 
-# Even with email_quality, 3227 unique Names and Emails remain
+# Even with email_quality, 3227 unique Names and Emails remain (2397 valid, 830 spam)
 # Next: Filter for email_quality == 1, read to csv
 View(employer_info %>% group_by(Employer_EmployerName, Employer_Email, email_quality) %>% tally(sort = TRUE))
 # Filter by email_quality
 View(employer_info %>% group_by(Employer_EmployerName, Employer_Email, email_quality) %>% tally(sort = TRUE) %>% filter(email_quality==1))
 # save into new data frame
+## employer_info1 contains 2397 valid emails
 employer_info %>% group_by(Employer_EmployerName, Employer_Email, email_quality) %>% 
     tally(sort = TRUE) %>% 
     filter(email_quality==1) -> employer_info1
+
+
+## employer_info0 contains 830 INVALID emails
+employer_info %>% 
+    group_by(Employer_EmployerName, Employer_Email, email_quality) %>% 
+    tally(sort = TRUE) %>% 
+    filter(email_quality==0) -> employer_info0
+
+
+### Prepare CSV file for testing of emails
+valid_email <- employer_info1$Employer_Email
+invalid_email <- employer_info0$Employer_Email
 
 
 ## CLEAN TELEPHONE NUMBERS
