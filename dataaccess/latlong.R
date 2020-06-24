@@ -123,4 +123,10 @@ THAI.map %>%
     + geom_map(map = THAI.map, aes(x=long, y=lat, map_id = region), fill='white', color='black') 
     + geom_point(data = thai.map2, aes(x=long, y=lat, color="red", alpha = .9))
     
-    
+# get rid of outlier in thai.map2 (zambia africa)
+thai.map2a <- thai.map2[-11,]
+View(thai.map2a)
+
+# successfully convert utm to lat/long data for visualization
+THAI.map %>% ggplot() + geom_map(map = THAI.map, aes(x=long, y=lat, map_id = region), fill='white', color='black') + geom_point(data = thai.map2a, aes(x=long, y=lat, color="red", alpha = .9))
+
