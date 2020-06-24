@@ -130,3 +130,54 @@ View(thai.map2a)
 # successfully convert utm to lat/long data for visualization
 THAI.map %>% ggplot() + geom_map(map = THAI.map, aes(x=long, y=lat, map_id = region), fill='white', color='black') + geom_point(data = thai.map2a, aes(x=long, y=lat, color="red", alpha = .9))
 
+# Summary ----
+
+# NOTE: key to properly converting utm to lat/long is recognition of the range of possible values
+# Caution: lat/long use to convert from utm is based on library(maps), filter region=='Thailand'
+# using lat/long from SHAPE file did NOT work (bkkfortified)
+library(maps)
+
+world.map <- map_data("world")
+THAI.map <- world.map %>% filter(region=='Thailand')
+
+# note in THAI.map, longitude range is 97.37392 - 105.641
+# note in THAI.map, lattitude range is 5.636767 - 20.42441
+# note in thai.map2a longitude range is 96.10385 - 101.5921 (largely overlap with THAI.map)
+# note in thai.map2a lattitude range is 7.1756 - 17.10503 (within range of THAI.map)
+
+
+
+# start with jobpost
+View(jobpost)
+
+# subset into dataframe
+utm <- data.frame(jobpost$utm_x, jobpost$utm_y)
+str(utm)
+
+# handle missing values before creating spatial objects
+View(utm)
+utm <- utm[-50,]
+
+# handle outliers as well (ie zambia africa)
+# utm <- utm[-11,]
+
+# ----- final conversion utm into lat/long ----- #
+# note: +zone=???  Thailand's zone is 47N
+# source: https://stackoverflow.com/questions/30018098/how-to-convert-utm-coordinates-to-lat-and-long-in-r/30018607
+
+sputm <- SpatialPoints(utm, proj4string=CRS("+proj=utm +zone=47N +datum=WGS84"))  
+spgeo <- spTransform(sputm, CRS("+proj=longlat +datum=WGS84")) 
+
+# transform  using spgeo
+thai.map2 <- data.frame(Location = jobpost$location, 
+                        lat = spgeo$jobpost.utm_y, 
+                        long = spgeo$jobpost.utm_x)
+
+
+# successfully convert utm to lat/long data for visualization 
+# note: 
+THAI.map %>% ggplot() 
+    + geom_map(map = THAI.map, aes(x=long, y=lat, map_id = region), fill='white', color='black') 
+    + geom_point(data = thai.map2a, aes(x=long, y=lat, color="red", alpha = .9))
+
+
