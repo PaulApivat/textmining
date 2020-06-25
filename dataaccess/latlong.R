@@ -149,6 +149,7 @@ THAI.map <- world.map %>% filter(region=='Thailand')
 
 # start with jobpost
 View(jobpost)
+write.csv(jobpost, "jobpost.csv") # for Rmarkdown
 
 # subset into dataframe
 utm <- data.frame(jobpost$utm_x, jobpost$utm_y)
