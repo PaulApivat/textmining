@@ -40,20 +40,75 @@ THAI.map <- world.map %>% filter(region=='Thailand')
 head(THAI.map)
 ```
 
-## Jobposts
+## Longitude and Lattitude Value Ranges
+
+Before converting UTM to longitude/lattitude data, we should know the range of both Longitudes and Lattitudes for Thailand.
+
+```{r, echo=TRUE}
+summary(THAI.map$long)
+summary(THAI.map$lat)
+```
+
+## Jobpost Data Frame
 
 Our objective is to visualize utm_x and utm_y in the `jobpost` data frame by turning them into lattitude and longitude data first. The `jobpost` data frame is retrieved from PostgreSQL. 
 
+Preparation includes writing it to CSV before loading into Rmarkdown.
+
 ```{r, echo=TRUE}
+jobpost <- read.csv("jobpost.csv")
+glimpse(jobpost)
+```
+
+## Subset Data Frame called UTM
+
+We'll select only `utm_x` and `utm_y` columns from `jobpost` because we're interested in these two columns. 
+
+```{r, echo=TRUE}
+utm <- data.frame(jobpost$utm_x, jobpost$utm_y)
+str(utm)
+```
+
+## Handle Missing Values and Outliers
+
+Row 50 in `jobpost` and also `utm` is missing so we'll delete that. Then we'll also delete row 11 because it's location is Zambia, Africa and its longitude and lattitude numbers are very different from Thailand - which will *distort* the map. 
+
+```{r, echo=TRUE}
+utm <- utm[-50,]
+utm <- utm[-11,]
+jobpost <- jobpost[-50,]
+jobpost <- jobpost[-11,]
+str(utm)
+str(jobpost)
+```
+
+## Conversion of UTM into Lat/Long
+
+After some research, we find out that Thailand's UTM zone is 47N. The stack overflow source I used to find the conversion code is [here](https://stackoverflow.com/questions/30018098/how-to-convert-utm-coordinates-to-lat-and-long-in-r/30018607). 
+
+We'll create two SpatialPoints object classes. Then transform them into a data frame containing lat and long data. 
+
+Remember to load `sp` library for this operation. 
+
+```{r, echo=TRUE}
+sputm <- SpatialPoints(utm, proj4string=CRS("+proj=utm +zone=47N +datum=WGS84"))  
+spgeo <- spTransform(sputm, CRS("+proj=longlat +datum=WGS84")) 
+
+thai.map2 <- data.frame(Location = jobpost$location, lat = spgeo$jobpost.utm_y, long = spgeo$jobpost.utm_x)
+
+head(thai.map2)
+```
+
+## Visualize with GGPLOT2
+
+Here we'll visualize the `THAI.map` we created previously and overlay the new Lat/Long data points (from UTM).
+
+We can see a concentration of `utm` data points from `jobpost` were made in Bangkok and the greater Bangkok areas with some jobs also posted outside Bangkok. 
+
+
+```{r, echo=TRUE}
+THAI.map %>% ggplot() + geom_map(map = THAI.map, aes(x=long, y=lat, map_id = region), fill='white', color='black') + geom_point(data = thai.map2, aes(x=long, y=lat, color="red", alpha = .9))
 
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
