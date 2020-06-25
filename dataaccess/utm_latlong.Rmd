@@ -1,0 +1,59 @@
+---
+title: "utm_latlong"
+author: "Paul Apivat Hanvongse"
+date: "6/25/2020"
+always_allow_html: yes
+output: 
+        html_document: default
+        pdf_document: default
+keep_tex: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Packages and Libraries
+
+```{r, echo=TRUE}
+library(maps)
+library(tidyverse)
+library(sp)
+library(rmarkdown)
+```
+
+```{r}
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+
+## World and Thai Maps
+
+First, we'll use `map_data` function from `ggplot2` to turn any map from the `maps` package into a data frame. This provides longitude and lattitude data. Then, we'll filter for Thailand to get Thai longtitude and lattitude data. 
+
+
+```{r, echo=TRUE}
+world.map <- map_data("world")
+head(world.map)
+
+THAI.map <- world.map %>% filter(region=='Thailand')
+head(THAI.map)
+```
+
+## Jobposts
+
+Our objective is to visualize utm_x and utm_y in the `jobpost` data frame by turning them into lattitude and longitude data first. The `jobpost` data frame is retrieved from PostgreSQL. 
+
+```{r, echo=TRUE}
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
