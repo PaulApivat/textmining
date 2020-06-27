@@ -1,0 +1,69 @@
+---
+title: "email_filter"
+author: "Paul Apivat Hanvongse"
+date: "6/27/2020"
+always_allow_html: yes
+output: 
+        html_document: default
+        pdf_document: default
+keep_tex: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## JobPost
+
+This is the jobpost dataset retrieved from postgresql. There are 6,428 Emails from each jobposting - some are valid, some are fake. 
+
+```{r, echo=TRUE}
+library(tidyverse)
+
+employer_info <- read_csv("employer_info.csv")
+glimpse(employer_info)
+```
+
+## Filtering Out Fake Emails
+
+Employer four different filters. Then remove Thai characters. There are 4892 emails left from 6428.
+
+```{r, echo=TRUE}
+
+employer_info %>%
+    # 5402 left (1026 out)
+    filter(!grepl("xx", employer_info$Employer_Email)) %>% 
+    # 5080 left  (1348 out)
+    filter(!grepl("([a-z0-9\\d])\\1\\1", tolower(Employer_Email))) %>% 
+    # 4915 left   (1513 out)
+    filter(!grepl("123", tolower(Employer_Email))) %>% 
+    # 4892 left   (1536 out)
+    filter(!grepl("-@", tolower(Employer_Email))) -> employer_info1
+
+
+employer_info1$Employer_Email <- gsub("[ก-๙]", "", employer_info1$Employer_Email)
+
+glimpse(employer_info1)
+
+```
+
+## Determine Unique Number of Emails
+
+Several rows are redundant. When verifying email through a service like Mail Gun, they charge per mail tested, so getting rid of redundant email will save costs. We would group by Employer Name and Email, so no Employer posts twice (however two employers may have the same email). This results in 3277 unique emails to verify. 
+
+```{r, echo=TRUE}
+
+employer_info %>% 
+    group_by(Employer_EmployerName, Employer_Email) %>% 
+    tally(sort = TRUE) %>% view()
+
+```
+
+
+## Result: Test 3277 emails (2397 valid and 830 invalid)
+
+For 2397 valid emails, **2313** were *actually* valid emails, **84 false positives (0.04%)**
+
+For 830 invalid emails, **730** were *actually* invalid emails, **100 false negatives (12%)**
+
+We should be able to continue using SmartJob database with the current filter if we can accept that we might miss 12% of quality emails. 
