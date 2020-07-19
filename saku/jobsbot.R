@@ -65,6 +65,26 @@ jobpost %>%
 jobpost %>%
     distinct(jobpost_id)
 
-# join employer + jobpost by manychat_id
+# emp_jobpost: join employer + jobpost by manychat_id
 employer %>%
-    left_join(jobpost, by = 'manychat_id') %>% view()
+    left_join(jobpost, by = 'manychat_id') %>% 
+    mutate()
+
+# Onet Classification ----
+
+# load onet_job_classification
+
+onet_job_classification <- read_csv("SOC_Structure.csv")
+
+View(onet_job_classification)
+
+# Major Group classification
+onet_job_classification %>%
+    group_by(`Major Group`, `SOC or O*NET-SOC 2019 Title`) %>%
+    count() %>% 
+    filter(!is.na(`Major Group`)) %>% view()
+
+
+
+
+
