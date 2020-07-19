@@ -21,11 +21,17 @@ event_count %>%
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-# access postgresql
+# access postgresql ----
 library(DBI)
 library(RPostgres)
 library(RPostgreSQL)
+library(tidyverse)
 
+con <- dbConnect(RPostgres::Postgres(),dbname = 'dbname', 
+                 host = 'localhost', 
+                 port = 5432, 
+                 user = 'user', 
+                 password = 'password')
 
 
 dbListTables(con)
@@ -37,4 +43,28 @@ glimpse(employer)
 jobpost <- dbReadTable(con, 'jobpost')
 glimpse(jobpost)
 
+# explore dataframes ----
 
+View(jobpost)
+View(employer)
+
+# prep for text analytics
+# jobpost - character data types: job_name, study_field, job_qualification, job_description, location
+# employer - character data types: company_name, role, name
+str(jobpost)
+str(employer)
+
+
+# distinct manychat id (employer: 62, jobpost: 52)
+employer %>% 
+    distinct(manychat_id)
+
+jobpost %>%
+    distinct(manychat_id)
+
+jobpost %>%
+    distinct(jobpost_id)
+
+# join employer + jobpost by manychat_id
+employer %>%
+    left_join(jobpost, by = 'manychat_id') %>% view()
