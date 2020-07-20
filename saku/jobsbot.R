@@ -329,9 +329,48 @@ emp_jobpost[61,2:3] <- major_group_classification[1,1:2]
 emp_jobpost[61,4] <- '11-3030'
 emp_jobpost[61,5] <- 'Financial Managers'
 
+# Exploring major_group and onet_title of each jobpost_name ----
+# Content / Theme analysis of initial Saku 1.0 jostpost / employers
+
+# Group_by major_group in descending order
+emp_jobpost %>%
+    mutate(major_group = as.factor(major_group)) %>%
+    filter(!is.na(major_group)) %>%
+    group_by(major_group) %>%
+    tally(sort = TRUE) %>% 
+    ggplot(aes(x = major_group, y = n)) +
+    geom_col(aes(fill = major_group)) +
+    scale_fill_discrete()
 
 
 
+emp_jobpost2 <- emp_jobpost %>% 
+    mutate(major_group = as.factor(major_group))
+
+str(emp_jobpost2)
+
+# major_group is a factor
+
+emp_jobpost2 %>%
+    filter(!is.na(major_group)) %>%
+    group_by(major_group) %>%
+    tally(sort = TRUE) %>%
+    ggplot(aes(x = reorder(major_group,n), y = n, fill = major_group)) +
+    geom_col() +
+    geom_text(aes(label = n)) +
+    scale_fill_brewer(palette = 'Set3') +
+    theme_dark() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    coord_flip()
+    
+?scale_fill_brewer
+    
+
+# Group by onet_title in descending order
+emp_jobpost %>%
+    filter(!is.na(onet_title)) %>%
+    group_by(onet_title) %>%
+    tally(sort = TRUE) 
 
 
 
