@@ -134,6 +134,7 @@ onet_job_classification[1571:1596,1] <- '55-0000'
 # Manual Classification ----
 
 emp_jobpost[1,2:3] <- major_group_classification[16, 1:2]
+emp_jobpost[1,4] <- '41-3010'
 emp_jobpost[1,5] <- 'Sales Representatives, Services'
 
 emp_jobpost[2,2:3] <- major_group_classification[16, 1:2]
@@ -141,9 +142,11 @@ emp_jobpost[2,4] <- '41-2010'
 emp_jobpost[2,5] <- 'Cashiers'
 
 emp_jobpost[3,2:3] <- major_group_classification[9,1:2]
+emp_jobpost[3,4] <- '27-1020'
 emp_jobpost[3,5] <- 'Graphic Designers'
 
 emp_jobpost[4,2:3] <- major_group_classification[12,1:2]
+emp_jobpost[4,4] <- '33-9030'
 emp_jobpost[4,5] <- 'Security Guards'
 
 emp_jobpost[5,2:3] <- major_group_classification[17,1:2]
@@ -261,16 +264,70 @@ emp_jobpost[36,2:3] <- major_group_classification[16,1:2]
 emp_jobpost[36,4] <- '41-2030'
 emp_jobpost[36,5] <- 'Retail Salespersons'
 
-emp_jobpost[26,2:3] 
-emp_jobpost[26,4]
-emp_jobpost[26,5]
+# skip 37-38
+
+emp_jobpost[39,2:3] <- major_group_classification[17,1:2] 
+emp_jobpost[39,4] <- '43-6010'
+emp_jobpost[39,5] <- 'Secretaries and Administrative Assistants'
+
+emp_jobpost[41,2:5] <- emp_jobpost[39,2:5]
+
+
+emp_jobpost[44,2:5] <- emp_jobpost[23,2:5]
 
 
 
+emp_jobpost[46,2:3] <- major_group_classification[2,1:2]
+emp_jobpost[46,4] <- '13-2010'
+emp_jobpost[46,5] <- 'Accountants and Auditors'
 
 
+emp_jobpost[47,2:5] <- emp_jobpost[46,2:5]
 
 
+emp_jobpost[50,2:5] <- major_group_classification[1,1:2]
+emp_jobpost[50,4] <- '11-2020'
+emp_jobpost[50,5] <- 'Sales Managers'
+
+emp_jobpost[51,2:5] <- major_group_classification[4,1:2]
+emp_jobpost[51,4] <- '17-2070'
+emp_jobpost[51,5] <- 'Electrical and Electronics Engineers'
+
+emp_jobpost[52,2:5] <- emp_jobpost[28,2:5]
+
+
+emp_jobpost[53,2:3] <- major_group_classification[17,1:2]
+emp_jobpost[53,4] <- '43-3030'
+emp_jobpost[53,5] <- 'Bookkeeping, Accounting, and Auditing Clerks'
+
+emp_jobpost[54,2:3] <- major_group_classification[2,1:2]
+emp_jobpost[54,4] <- '13-2010'
+emp_jobpost[54,5] <- 'Accountants and Auditors'
+
+emp_jobpost[55,2:5] <- emp_jobpost[30,2:5]
+
+
+emp_jobpost[56,2:5] <- emp_jobpost[25,2:5]
+
+
+emp_jobpost[57,2:5] <- emp_jobpost[15,2:5]
+
+
+emp_jobpost[58,2:3] <- major_group_classification[2,1:2]
+emp_jobpost[58,4] <- '13-1070'
+emp_jobpost[58,5] <- 'Human Resources Workers'
+
+emp_jobpost[59,2:3] <- major_group_classification[17,1:2]
+emp_jobpost[59,4] <- '43-9190'
+emp_jobpost[59,5] <- 'Miscellaneous Office and Administrative Support Workers'
+
+emp_jobpost[60,2:3] <- major_group_classification[16,1:2]
+emp_jobpost[60,4] <- '41-2030'
+emp_jobpost[60,5] <- 'Retail Salespersons'
+
+emp_jobpost[61,2:3] <- major_group_classification[1,1:2]
+emp_jobpost[61,4] <- '11-3030'
+emp_jobpost[61,5] <- 'Financial Managers'
 
 
 
