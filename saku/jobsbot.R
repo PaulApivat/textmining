@@ -349,7 +349,9 @@ emp_jobpost2 <- emp_jobpost %>%
 
 str(emp_jobpost2)
 
-# major_group is a factor
+# Visualization ----
+
+# Bar chart is major_group is a factor
 
 emp_jobpost2 %>%
     filter(!is.na(major_group)) %>%
@@ -357,20 +359,26 @@ emp_jobpost2 %>%
     tally(sort = TRUE) %>%
     ggplot(aes(x = reorder(major_group,n), y = n, fill = major_group)) +
     geom_col() +
-    geom_text(aes(label = n)) +
+    geom_text(aes(label = n), color = 'black', hjust = 2) +
     scale_fill_brewer(palette = 'Set3') +
     theme_dark() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1,)) +
     coord_flip()
     
-?scale_fill_brewer
+
     
 
 # Group by onet_title in descending order
 emp_jobpost %>%
     filter(!is.na(onet_title)) %>%
     group_by(onet_title) %>%
-    tally(sort = TRUE) 
+    tally(sort = TRUE) %>%
+    ggplot(aes(x = reorder(onet_title, n), y = n)) +
+    geom_segment(aes(x = reorder(onet_title, n), xend = onet_title, y = 0, yend = n), size = 1, color = 'blue', linetype = 'dotdash') +
+    geom_point(aes(size = n)) +
+    theme(axis.text.x = element_text(hjust = 1)) +
+    coord_flip()
+
 
 
 
