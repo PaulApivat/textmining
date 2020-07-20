@@ -70,9 +70,11 @@ emp_jobpost <- employer %>%
     left_join(jobpost, by = 'manychat_id') %>% 
     mutate(
         major_group = NA,
-        major_group_id = NA
+        major_group_id = NA,
+        broad_occupation = NA,
+        onet_title = NA
         ) %>% 
-    select(job_name, major_group, major_group_id, job_qualification, job_description, study_field, everything())
+    select(job_name, major_group_id, major_group, broad_occupation, onet_title, job_qualification, job_description, study_field, everything())
 
 View(emp_jobpost)
 
@@ -84,6 +86,9 @@ onet_job_classification <- read_csv("SOC_Structure.csv")
 
 View(onet_job_classification)
 
+onet_job_classification %>%
+    distinct(`Broad Occupation`, `SOC or O*NET-SOC 2019 Title`) %>% view()
+
 # Subset Major Group classification by renaming variables
 major_group_classification <- onet_job_classification %>%
     rename(
@@ -94,9 +99,33 @@ major_group_classification <- onet_job_classification %>%
     count() %>% 
     filter(!is.na(major_group_id))
 
-View(major_group_classification)    
+View(major_group_classification)
 
+# filter for restaurant-related
 
+onet_job_classification %>% 
+    filter(`Major Group` == 35-0000) %>% view()
 
+# Manual Classification ----
 
+emp_jobpost[1,2:3] <- major_group_classification[16, 1:2]
+emp_jobpost[1,5] <- 'Sales Representatives, Services'
+
+emp_jobpost[2,2:3] <- major_group_classification[16, 1:2]
+emp_jobpost[2,4] <- '41-2010'
+emp_jobpost[2,5] <- 'Cashiers'
+
+emp_jobpost[3,2:3] <- major_group_classification[9,1:2]
+emp_jobpost[3,5] <- 'Graphic Designers'
+
+emp_jobpost[4,2:3] <- major_group_classification[12,1:2]
+emp_jobpost[4,5] <- 'Security Guards'
+
+emp_jobpost[5,2:3] <- major_group_classification[17,1:2]
+emp_jobpost[5,4] <- '43-4050'
+emp_jobpost[5,5] <- 'Customer Service Representatives'
+
+emp_jobpost[6,2:3] <- major_group_classification[1,1:2]
+emp_jobpost[6,4] <- '11-3120'
+emp_jobpost[6,5] <- 'Human Resources Managers'
 
