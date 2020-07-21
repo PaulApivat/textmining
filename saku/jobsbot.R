@@ -363,7 +363,8 @@ emp_jobpost2 %>%
     scale_fill_brewer(palette = 'Set3') +
     theme_dark() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1,)) +
-    coord_flip()
+    coord_flip() +
+    labs(title = 'Major Categories of Jobs', subtitle = 'n = 52', x = 'Number of Jobs', y = 'Broad Job Categories', fill = 'Categories')
     
 
     
@@ -374,10 +375,11 @@ emp_jobpost %>%
     group_by(onet_title) %>%
     tally(sort = TRUE) %>%
     ggplot(aes(x = reorder(onet_title, n), y = n)) +
-    geom_segment(aes(x = reorder(onet_title, n), xend = onet_title, y = 0, yend = n), size = 1, color = 'blue', linetype = 'dotdash') +
+    geom_segment(aes(x = reorder(onet_title, n), xend = onet_title, y = 0, yend = n), size = 1, color = 'blue', linetype = 'solid') +
     geom_point(aes(size = n)) +
     theme(axis.text.x = element_text(hjust = 1)) +
-    coord_flip()
+    coord_flip() +
+    labs(title = 'Detailed Categories of Jobs', subtitle = 'n = 52', x = 'Number of Jobs', y = 'Detailed Categories')
 
 
 
