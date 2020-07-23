@@ -34,14 +34,78 @@ con <- dbConnect(RPostgres::Postgres(),dbname = 'dbname',
                  password = 'password')
 
 
+
 dbListTables(con)
 
 # write table to dataframe
 employer <- dbReadTable(con, 'employer')
 glimpse(employer)
+View(employer)
 
 jobpost <- dbReadTable(con, 'jobpost')
 glimpse(jobpost)
+View(jobpost)
+
+# explore data from SQL and R ----
+library(DBI)
+library(tidyverse)
+library(sqldf) # This doesn't work, will stick with DBI
+
+# query using DPLYR Syntax
+tbl(con, 'jobpost') %>%
+    summarize(
+        avg_min_age = mean(age_min),
+        avg_max_age = mean(age_max)
+    ) %>%
+    show_query()
+
+# query using DBI
+dbListFields(con, 'employer')
+
+dbReadTable(con, 'employer')
+dbReadTable(con, "jobpost")
+
+dbGetQuery(con, "SELECT * FROM employer LIMIT 5")
+
+dbGetQuery(con, "SELECT job_name FROM jobpost WHERE min_salary > 30000")
+
+dbGetQuery(con, "SELECT age_max FROM jobpost 
+                ORDER BY age_max DESC
+                LIMIT 20")
+
+dbGetQuery(con, "SELECT DISTINCT(study_field), min_salary FROM jobpost
+                WHERE min_salary > 15000")
+
+# Query jobpost where job_name contains letter 'ec' (i.e., Technical Lead, Project Manager, Account Executive)
+dbGetQuery(con, "SELECT job_name, min_salary FROM jobpost
+                WHERE job_name LIKE '%ec%'")
+
+# search for word 'admin'
+dbGetQuery(con, "SELECT job_name, min_salary FROM jobpost
+                WHERE job_name LIKE '%_dmin%'")
+
+
+# search for job_names and min_salary that begin with A
+dbGetQuery(con, "SELECT job_name, min_salary FROM jobpost
+                WHERE job_name LIKE 'A%'")
+
+# count gender groupings using DPLYR syntax
+tbl(con, "jobpost") %>%
+    group_by(job_sex) %>%
+    summarize(
+        total_min_salary = sum(min_salary),
+        total_gender = n()
+    ) %>%
+    show_query()
+
+# run same qeury using DBI
+dbGetQuery(con, "SELECT job_sex, SUM(min_salary) AS total_min_salary, COUNT(*) AS total_gender
+                FROM jobpost 
+                GROUP BY job_sex")
+
+
+
+
 
 # explore dataframes ----
 
