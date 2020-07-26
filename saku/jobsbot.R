@@ -34,7 +34,6 @@ con <- dbConnect(RPostgres::Postgres(),dbname = 'dbname',
                  password = 'password')
 
 
-
 dbListTables(con)
 
 # write table to dataframe
