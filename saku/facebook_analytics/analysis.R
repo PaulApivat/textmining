@@ -157,18 +157,25 @@ saku_page_select %>%
 
 
 
-# create a function ----
-create_line_chart_fn<- function(dataset, col_name){
+# create a general function ----
+
+
+
+
+# General Function for line chart
+create_line_chart_fn_2 <- function(dataset, col_name){
     col_name <- enquo(col_name)
+    # key for grabbing the column name of the parameter
+    column_name <- paste0("Metric: ", as_label(col_name))
+    
     dataset %>%
-    select(Date, !!(col_name)) %>% 
-        mutate(as.character(!!(col_name)) = !!(col_name)) %>%
-        mutate(lifetime_total_likes = as.numeric(!!(col_name))) %>%
-        mutate(lifetime_total_likes = if_else(is.na(lifetime_total_likes), 0, lifetime_total_likes)) %>%
+        select(Date, !!(col_name)) %>% 
+        mutate(local_col_name = as.numeric(!!(col_name))) %>%
+        mutate(local_col_name = if_else(is.na(local_col_name), 0, local_col_name)) %>%
         slice(-1) %>%
         mutate(Date = as.Date(Date) %>% ymd()) %>%
         
-        ggplot(aes(x = Date, y = lifetime_total_likes)) +
+        ggplot(aes(x = Date, y = local_col_name)) +
         geom_vline(xintercept = as.Date("2020-06-01"), na.rm = FALSE, linetype = 'dashed') +
         geom_vline(xintercept = as.Date("2020-07-01"), na.rm = FALSE, linetype = 'dashed') +
         geom_vline(xintercept = as.Date("2020-08-01"), na.rm = FALSE, linetype = 'dashed') +
@@ -179,66 +186,19 @@ create_line_chart_fn<- function(dataset, col_name){
             axis.text.x = element_text(angle = 45, hjust = 1)
         ) +
         labs(
-            title = paste0("dataset")
+            title = glue('{column_name}'),
+            y = 'Number of People'
         )
 }
 
-create_line_chart_fn(saku_page_select, `Daily Page Engaged Users`)
-
-
-
-#### Sandbox Functions ##########
-
-dataset %>%
-    select(Date, !!(col_name)) %>% 
-    mutate(as.character(!!(col_name)) = !!(col_name)) %>%
-    mutate(lifetime_total_likes = as.numeric(!!(col_name))) %>%
-    mutate(lifetime_total_likes = if_else(is.na(lifetime_total_likes), 0, lifetime_total_likes)) %>%
-    slice(-1) %>%
-    mutate(Date = as.Date(Date) %>% ymd()) %>%
-    
-    ggplot(aes(x = Date, y = lifetime_total_likes)) +
-    geom_vline(xintercept = as.Date("2020-06-01"), na.rm = FALSE, linetype = 'dashed') +
-    geom_vline(xintercept = as.Date("2020-07-01"), na.rm = FALSE, linetype = 'dashed') +
-    geom_vline(xintercept = as.Date("2020-08-01"), na.rm = FALSE, linetype = 'dashed') +
-    scale_x_date(breaks = '5 day') +
-    geom_line(color = 'green') +
-    theme_classic() +
-    theme(
-        axis.text.x = element_text(angle = 45, hjust = 1)
-    ) +
-    labs(
-        title = glue('Line Chart')
-    )
-
-##############################
-
-
-
-saku_page_select["Daily Page Engaged Users"]
-
-saku_page %>%
-    view()
-
-
-
-saku_page %>%
-    select(Date, `Lifetime Total Likes`) %>% 
-    mutate(lifetime_total_likes = as.numeric(`Lifetime Total Likes`)) %>%
-    mutate(lifetime_total_likes = if_else(is.na(lifetime_total_likes), 0, lifetime_total_likes)) %>%
-    slice(-1) %>%
-    mutate(Date = as.Date(Date) %>% ymd()) %>%
-    
-    ggplot(aes(x = Date, y = lifetime_total_likes)) +
-    geom_vline(xintercept = as.Date("2020-06-01"), na.rm = FALSE, linetype = 'dashed') +
-    geom_vline(xintercept = as.Date("2020-07-01"), na.rm = FALSE, linetype = 'dashed') +
-    geom_vline(xintercept = as.Date("2020-08-01"), na.rm = FALSE, linetype = 'dashed') +
-    scale_x_date(breaks = '5 day') +
-    geom_line(color = 'red') +
-    theme_classic() +
-    theme(
-        axis.text.x = element_text(angle = 45, hjust = 1)
-    )
+create_line_chart_fn_2(saku_page_select, `28 Days Total Reach`)
+create_line_chart_fn_2(saku_page_select, `28 Days Organic Reach`)
+create_line_chart_fn_2(saku_page_select, `28 Days Total Impressions`)
+create_line_chart_fn_2(saku_page_select, `28 Days Organic impressions`)
+create_line_chart_fn_2(saku_page_select, `28 Days Paid Impressions`)
+create_line_chart_fn_2(saku_page_select, `28 Days Viral impressions`)
+create_line_chart_fn_2(saku_page_select, `Weekly Page Engaged Users`)
+create_line_chart_fn_2(saku_page, `Daily Page Consumptions`)
 
 
     
