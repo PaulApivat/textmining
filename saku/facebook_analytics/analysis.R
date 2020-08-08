@@ -32,14 +32,16 @@ saku_page %>%
 
 # filter by column names
 # list as vector
+
+# Columns that contain 'Daily' n = 533
 saku_page %>%
     select(contains("Daily")) %>% 
-    colnames()
+    colnames() %>% view()
 
-
+# Columns that contain 'Weekly' n = 906
 saku_page %>%
-    select(contains("Monthly Total")) %>%
-    colnames()
+    select(contains("Weekly")) %>%
+    colnames() %>% view()
     
 
 ## Lifetime, Daily, Weekly, "28 Days", 
@@ -60,8 +62,26 @@ saku_page %>%
 ## Weekly Reach By Language
 ## Daily Demographics: People Talking About This
 
+# Grab specific column names of interest 
 
+# Identify first 100 rows
+saku_page %>% 
+    names() %>%
+    head(n = 50)
+
+# Select 10 Columns of Interest
 saku_page %>%
-    colnames()
+    select(Date, 
+           `Lifetime Total Likes`, 
+           `Daily Page Engaged Users`, 
+           `Weekly Page Engaged Users`, 
+           `28 Days Total Reach`, 
+           `28 Days Organic Reach`, 
+           `28 Days Total Impressions`,
+           `28 Days Organic impressions`,
+           `28 Days Paid Impressions`,
+           `28 Days Viral impressions`) %>%
+    view()
+
 
 # exploring saku_post data ----
