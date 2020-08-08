@@ -107,7 +107,54 @@ saku_page %>%
         axis.text.x = element_text(angle = 45, hjust = 1)
     )
 
-# create a function
+# Daily Page Enagement
+saku_page_select %>%
+    select(Date, `Daily Page Engaged Users`) %>% 
+    mutate(`Daily Page Engaged Users` = as.numeric(`Daily Page Engaged Users`)) %>%
+    mutate(`Daily Page Engaged Users` = if_else(is.na(`Daily Page Engaged Users`), 0, `Daily Page Engaged Users`)) %>%
+    slice(-1) %>%
+    mutate(Date = as.Date(Date) %>% ymd()) %>%
+    
+    ggplot(aes(x = Date, y = `Daily Page Engaged Users`)) +
+    geom_vline(xintercept = as.Date("2020-06-01"), na.rm = FALSE, linetype = 'dashed') +
+    geom_vline(xintercept = as.Date("2020-07-01"), na.rm = FALSE, linetype = 'dashed') +
+    geom_vline(xintercept = as.Date("2020-08-01"), na.rm = FALSE, linetype = 'dashed') +
+    scale_x_date(breaks = '5 day') +
+    geom_line(color = 'red') +
+    theme_classic() +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    labs(
+        title = paste0("`Daily Page Engaged Users`")
+    )
+
+# Weekly Page Engaged Users
+saku_page_select %>%
+    select(Date, `Weekly Page Engaged Users`) %>% 
+    mutate(`Weekly Page Engaged Users` = as.numeric(`Weekly Page Engaged Users`)) %>%
+    mutate(`Weekly Page Engaged Users` = if_else(is.na(`Weekly Page Engaged Users`), 0, `Weekly Page Engaged Users`)) %>%
+    slice(-1) %>%
+    mutate(Date = as.Date(Date) %>% ymd()) %>%
+    
+    ggplot(aes(x = Date, y = `Weekly Page Engaged Users`)) +
+    geom_vline(xintercept = as.Date("2020-06-01"), na.rm = FALSE, linetype = 'dashed') +
+    geom_vline(xintercept = as.Date("2020-07-01"), na.rm = FALSE, linetype = 'dashed') +
+    geom_vline(xintercept = as.Date("2020-08-01"), na.rm = FALSE, linetype = 'dashed') +
+    scale_x_date(breaks = '5 day') +
+    geom_line(color = 'red') +
+    theme_classic() +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    labs(
+        title = paste0("`Weekly Page Engaged Users`")
+    )
+
+
+
+
+# create a function ----
 create_line_chart_fn<- function(dataset, col_name){
     col_name <- enquo(col_name)
     dataset %>%
@@ -129,7 +176,7 @@ create_line_chart_fn<- function(dataset, col_name){
             axis.text.x = element_text(angle = 45, hjust = 1)
         ) +
         labs(
-            title = glue('Line Chart')
+            title = paste0("dataset")
         )
 }
 
