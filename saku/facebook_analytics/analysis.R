@@ -105,6 +105,9 @@ saku_page %>%
     theme_classic() +
     theme(
         axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    labs(
+        title = paste0("`Lifetime Total Likes`")
     )
 
 # Daily Page Enagement
