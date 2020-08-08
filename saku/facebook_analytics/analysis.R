@@ -12,8 +12,56 @@ library(tidyverse)
 saku_page <- read_csv("./data/Facebook Insights Data Export - Saku - 2020-08-03.csv")
 glimpse(saku_page)
 
-names(saku_page)
+
 
 # Saku Post
 saku_post <- read_csv("./data/Facebook Insights Data Export (Post Level) - Saku - 2020-08-03.csv")
 glimpse(saku_post)
+
+# exploring saku_page data ----
+
+# NOTE: 
+
+# saku_page: 90 obs, 1995 variables
+# saku_post: 16 obs, 52 variables
+
+# grabbing first 100 columns in saku_page
+saku_page %>% 
+    names() %>%
+    head(n = 50)
+
+# filter by column names
+# list as vector
+saku_page %>%
+    select(contains("Daily")) %>% 
+    colnames()
+
+
+saku_page %>%
+    select(contains("Monthly Total")) %>%
+    colnames()
+    
+
+## Lifetime, Daily, Weekly, "28 Days", 
+## Total, Viral, Logged-in, Organic, Check-Ins
+## impressions, Feedback, Video, Paid, Clicked, Repeats
+## Daily/Weekly/28 Days...Total Frequency Distribution
+## Daily/Weekly/28 Days...Page Posts Frequency Distribution
+## Daily/Weekly/28 Days...Talking About This By Story Type
+## Daily/Weekly/28 Days...Page Stories By Story Type
+## Daily/Weekly/28 Days...Page Consumptions By Type
+## Lifetime Likes by Gender and Age
+## Lifetime Likes by Country
+## Lifetime Likes by City
+## Lifetime Likes by Language
+## Weekly Reach Demographics
+## Weekly Reach By Country
+## Weekly Reach By City
+## Weekly Reach By Language
+## Daily Demographics: People Talking About This
+
+
+saku_page %>%
+    colnames()
+
+# exploring saku_post data ----
