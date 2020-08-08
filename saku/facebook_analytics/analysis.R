@@ -84,4 +84,25 @@ saku_page %>%
     view()
 
 
-# exploring saku_post data ----
+
+# visualize saku_page data ----
+library(lubridate)
+
+# Lifetime Total Likes
+saku_page %>%
+    select(Date, `Lifetime Total Likes`) %>% 
+    mutate(lifetime_total_likes = as.numeric(`Lifetime Total Likes`)) %>%
+    mutate(lifetime_total_likes = if_else(is.na(lifetime_total_likes), 0, lifetime_total_likes)) %>%
+    slice(-1) %>%
+    mutate(Date = as.Date(Date) %>% ymd()) %>%
+    
+    ggplot(aes(x = Date, y = lifetime_total_likes)) +
+    scale_x_date(breaks = '2 day') +
+    geom_line(color = 'red') +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+    
+
+
+    
