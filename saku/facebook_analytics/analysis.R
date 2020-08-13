@@ -199,6 +199,9 @@ create_line_chart_fn_2(saku_page_select, `28 Days Paid Impressions`)
 create_line_chart_fn_2(saku_page_select, `28 Days Viral impressions`)
 create_line_chart_fn_2(saku_page_select, `Weekly Page Engaged Users`)
 create_line_chart_fn_2(saku_page, `Daily Page Consumptions`)
+create_line_chart_fn_2(saku_page, `Weekly Viral Reach`)
+create_line_chart_fn_2(saku_page, `Weekly Logged-in Page Views`)
+create_line_chart_fn_2(saku_page, `Weekly Total Impressions of your posts`)
 
+# Explore Saku Post separately
 
-    
