@@ -204,4 +204,28 @@ create_line_chart_fn_2(saku_page, `Weekly Logged-in Page Views`)
 create_line_chart_fn_2(saku_page, `Weekly Total Impressions of your posts`)
 
 # Explore Saku Post separately
+library(lubridate)
+
+
+names(saku_post)
+
+saku_post %>%
+    select(`Type`, `Posted`, `Lifetime Post Total Reach`) %>%
+    slice(-1) %>%
+    mutate(
+        Date = as.Date(`Posted`, "%m/%d/%Y %H:%M:%S"),
+        Date2 = as.Date(Date) %>% ymd()
+    ) %>%
+    ggplot(aes(x = Date2, y = `Lifetime Post Total Reach`, fill = Type)) +
+    geom_line() 
+    
+
+
+
+
+
+
+
+
+
 
