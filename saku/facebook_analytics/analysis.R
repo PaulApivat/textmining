@@ -209,19 +209,45 @@ library(lubridate)
 
 names(saku_post)
 
+# Explore Lifetime Post Total Reach
 saku_post %>%
     select(`Type`, `Posted`, `Lifetime Post Total Reach`) %>%
     slice(-1) %>%
     mutate(
         Date = as.Date(`Posted`, "%m/%d/%Y %H:%M:%S"),
-        Date2 = as.Date(Date) %>% ymd()
+        Date2 = as.Date(Date) %>% ymd(),
+        lifetime_post_total_reach = as.numeric(`Lifetime Post Total Reach`)
     ) %>%
-    ggplot(aes(x = Date2, y = `Lifetime Post Total Reach`, fill = Type)) +
-    geom_line() 
+    ggplot(aes(x = Date2, y = lifetime_post_total_reach, fill = Type)) +
+    geom_col() 
     
 
+# Boxplot
+saku_post %>%
+    select(`Type`, `Posted`, `Lifetime Post Total Reach`) %>%
+    slice(-1) %>%
+    mutate(
+        Date = as.Date(`Posted`, "%m/%d/%Y %H:%M:%S"),
+        Date2 = as.Date(Date) %>% ymd(),
+        lifetime_post_total_reach = as.numeric(`Lifetime Post Total Reach`)
+    ) %>%
+    ggplot(aes(x = Type, y = lifetime_post_total_reach, fill = Type)) +
+    geom_boxplot()
 
 
+# Filter out outliers
+# Boxplot
+saku_post %>%
+    select(`Type`, `Posted`, `Lifetime Post Total Reach`) %>%
+    slice(-1) %>%
+    mutate(
+        Date = as.Date(`Posted`, "%m/%d/%Y %H:%M:%S"),
+        Date2 = as.Date(Date) %>% ymd(),
+        lifetime_post_total_reach = as.numeric(`Lifetime Post Total Reach`)
+    ) %>%
+    filter(lifetime_post_total_reach < 8000) %>%
+    ggplot(aes(x = Type, y = lifetime_post_total_reach, fill = Type)) +
+    geom_boxplot()
 
 
 
