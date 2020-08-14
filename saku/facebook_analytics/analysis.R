@@ -203,10 +203,10 @@ create_line_chart_fn_2(saku_page, `Weekly Viral Reach`)
 create_line_chart_fn_2(saku_page, `Weekly Logged-in Page Views`)
 create_line_chart_fn_2(saku_page, `Weekly Total Impressions of your posts`)
 
-# Explore Saku Post separately
+# Explore Saku Post separately ----
 library(lubridate)
 
-
+# Get all column names
 names(saku_post)
 
 # Explore Lifetime Post Total Reach
